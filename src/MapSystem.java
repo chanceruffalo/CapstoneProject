@@ -1,8 +1,10 @@
-
+import java.util.List;
 
 public class MapSystem {
 
     MapTile[][] map;
+    //forward lists are for render
+    Item[] items,forwardItems;
     float minX,minY,maxX,maxY;
     int x,y,w,h,i,j;
     Building[] forwardBuildings,buildings;
@@ -24,7 +26,9 @@ public class MapSystem {
         j = 1;
         map = new MapTile[x][y];
         buildings = preset.buildings;
+        items = preset.items;
         forwardBuildings = new Building[buildings.length];
+        forwardItems = new Item[items.length];
         for(int j = 0; j < y; j ++){
             for(int i = 0; i < x; i ++){
                 MapTile temp = new MapTile(i*w, j * h, i, j, w, h,preset.assets[preset.home[j][i]],20);
@@ -34,17 +38,25 @@ public class MapSystem {
     }
 
     public void displayBackground() {
+        //display floor
         for (int j = 0; j < y; j++) {
             for (int i = 0; i < x; i++) {
                 map[i][j].display();
             }
         }
-        //display buildigs behind character
+        //display buildings behind character
         for(Building b:buildings){
             if (b != null) {
                 b.display();
             }
         }
+        //display items behind character
+        for(Item i: items){
+            if(i != null){
+                i.display();
+            }
+        }
+
     }
 
     public void displayForground() {
@@ -53,11 +65,18 @@ public class MapSystem {
             if (b != null) {
                 b.display();
             }
-
+        }
+        for (Item i : forwardItems) {
+            if (i != null) {
+                i.display();
+            }
         }
     }
     public boolean checkBoarder(Point[] points){
+        //counter for buildings => i
+        //counter for items => j
         i = 0;
+        j = 0;
 
         //display buildings either infront of player or behind player
         for (Building b : buildings) {
@@ -71,11 +90,32 @@ public class MapSystem {
             }
             i ++;
         }
+
+        //display items either infront of player or behind player
+        for (Item it : items) {
+            if (it != null) {
+                if (points[3].y <= it.maxY && contains(forwardItems,it) == -1){
+                    forwardItems[j] = it;
+                }
+                else if(points[3].y >= it.maxY){
+                    forwardItems[j] = null;
+                }
+            }
+            i ++;
+        }
         for(Point p: points){
             //check if player runs into each building
             for (Building b : buildings) {
                 if(b != null){
                     if(p.x >b.minX  && p.y > b.minY && p.x  < b.maxX && p.y  < b.maxY){
+                        return false;
+                    }
+                }
+            }
+
+            for(Item i : items){
+                if(i != null){
+                    if(p.x >i.minX  && p.y > i.minY && p.x  < i.maxX && p.y  < i.maxY){
                         return false;
                     }
                 }
@@ -105,9 +145,9 @@ public class MapSystem {
         }
     }
 
-    public int contains(Building[] buildings, Building b){
+    public int contains(Object[] items, Object b){
         int i = 0;
-        for (Building temp: buildings) {
+        for (Object temp: items) {
             if(temp == b){
                 return i;
             }

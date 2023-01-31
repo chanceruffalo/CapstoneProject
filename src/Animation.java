@@ -35,7 +35,6 @@ public class Animation {
 
 
     }
-
     public PImage display(){
         counter ++;
         if(counter > frameRate){
