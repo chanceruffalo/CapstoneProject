@@ -1,22 +1,25 @@
 public class GEngine {
 
-    MapSystem home,currentMap;
+    MapSystem currentMap;
     mapPresets mappresets;
+    Renderer renderer;
     static Player player;
     static UI ui;
 
     public GEngine(){
         mappresets = new mapPresets();
-        home = new MapSystem(mappresets);
-        currentMap = home;
+        currentMap = new MapSystem(mappresets);
         player = new Player();
         ui = new UI();
+        renderer = new Renderer();
+        renderer.addGraphics(currentMap.buildings);
+        renderer.addGraphics(currentMap.items);
+        renderer.push(player);
     }
 
     public void start(){
         currentMap.displayBackground();
-        player.display();
-        currentMap.displayForground();
+        renderer.display();
         ui.display();
     }
 

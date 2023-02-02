@@ -10,7 +10,7 @@ public class mapPresets {
         w = 960/20;
         h = 540/11;
         items = new Item[5];
-        items[0] = new Item(175,300,50,50,"Red Mushroom","Demo this item is for testing",new int[]{ 1,2,3,4,5 },"ImageAssets/mushroom",5,5,35,10);
+        items[0] = new Item(675,300,50,50,"Red Mushroom","Demo this item is for testing",new int[]{ 1,2,3,4,5 },"ImageAssets/mushroom",5,5,35,10);
         buildings = new Building[5];
         buildings[0] = new Building(200,-5,225,225,"ImageAssets/greenhouse",10,10,20,100,10);
         buildings[1] = new Building(-10,-30,300,250,"ImageAssets/tree",10,30,160,230,10);

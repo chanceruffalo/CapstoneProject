@@ -1,28 +1,14 @@
-public class Building {
+public class Building extends Graphic {
     float x,y,maxX,maxY,minX,minY;
     int h,w;
     Animation animation;
-
-    //constructors with diffrent parameters to make life easier
-    public Building(float x,float y,int w,int  h,String ImgAddress,int framerate, float boundaryX, float boundaryY){
-        this.x = x;
-        this.y = y;
-        this.h = h;
-        this.w = w;
-        //for player boundaries if player can walk behind building
-        maxX = x+w-boundaryX;
-        maxY = y+h;
-        minX = x+boundaryX;
-        minY = y+boundaryY;
-
-        animation = new Animation(ImgAddress,framerate,w,h);
-    }
 
     public Building(float x,float y,int w,int  h,String ImgAddress,int framerate, float boundaryLX,float boundaryRX, float boundaryUY,float boundaryDY){
         this.x = x;
         this.y = y;
         this.h = h;
         this.w = w;
+        value = y+h;
         //for player boundaries if player can walk behind building
         maxX = x+w-boundaryRX;
         maxY = y+h-boundaryDY;

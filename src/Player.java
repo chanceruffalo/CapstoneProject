@@ -3,9 +3,9 @@ import processing.core.PImage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player {
-     float x,y,dx,dy,speed,attack,defense,health,maxHealth,experience,maxExperience;
-     int i,j,w,h,level;
+public class Player extends Graphic{
+     float x,y,w,h,dx,dy,speed,attack,defense,health,maxHealth,experience,maxExperience;
+     int i,j,level;
      boolean up,down,left,right;
      Point[] contactPoints;
      Item[] inventory;
@@ -28,6 +28,7 @@ public class Player {
          dy = 0;
          x = 800;
          y = 400;
+         value = y +h;
          i = 0;
          j = 0;
          w = 49;
@@ -46,8 +47,8 @@ public class Player {
                  new Point(x+w,y+h),new Point(x+w/4,y+h),new Point(x+w/2,y+h),new Point(x+3*(w/4),y+h), new Point(x + w,y+h)
          };
 
-         rightIdle = new Animation("ImageAssets/MC1_",2,w,h);
-         leftIdle = new Animation("ImageAssets/MC1_right",2,w,h);
+         rightIdle = new Animation("ImageAssets/MC1_",2,(int)w,(int)h);
+         leftIdle = new Animation("ImageAssets/MC1_right",2,(int)w,(int)h);
          current = leftIdle;
 
      }
@@ -100,6 +101,7 @@ public class Player {
          }
          dx = 0;
          dy = 0;
+         value = y+h;
 
      }
 

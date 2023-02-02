@@ -4,10 +4,10 @@ public class MapSystem {
 
     MapTile[][] map;
     //forward lists are for render
-    Item[] items,forwardItems;
+    Item[] items;
     float minX,minY,maxX,maxY;
     int x,y,w,h,i,j;
-    Building[] forwardBuildings,buildings;
+    Building[] buildings;
     public MapSystem(mapPresets preset){
         //x , y are tiles counts for map
         x = 20;
@@ -27,8 +27,6 @@ public class MapSystem {
         map = new MapTile[x][y];
         buildings = preset.buildings;
         items = preset.items;
-        forwardBuildings = new Building[buildings.length];
-        forwardItems = new Item[items.length];
         for(int j = 0; j < y; j ++){
             for(int i = 0; i < x; i ++){
                 MapTile temp = new MapTile(i*w, j * h, i, j, w, h,preset.assets[preset.home[j][i]],20);
@@ -44,33 +42,6 @@ public class MapSystem {
                 map[i][j].display();
             }
         }
-        //display buildings behind character
-        for(Building b:buildings){
-            if (b != null) {
-                b.display();
-            }
-        }
-        //display items behind character
-        for(Item i: items){
-            if(i != null){
-                i.display();
-            }
-        }
-
-    }
-
-    public void displayForground() {
-        //display buildings in front of player
-        for (Building b : forwardBuildings) {
-            if (b != null) {
-                b.display();
-            }
-        }
-        for (Item i : forwardItems) {
-            if (i != null) {
-                i.display();
-            }
-        }
     }
     public boolean checkBoarder(Point[] points){
         //counter for buildings => i
@@ -78,31 +49,6 @@ public class MapSystem {
         i = 0;
         j = 0;
 
-        //display buildings either infront of player or behind player
-        for (Building b : buildings) {
-            if (b != null) {
-                if (points[3].y <= b.maxY && contains(forwardBuildings,b) == -1){
-                    forwardBuildings[i] = b;
-                }
-                else if(points[3].y >= b.maxY){
-                    forwardBuildings[i] = null;
-                }
-            }
-            i ++;
-        }
-
-        //display items either infront of player or behind player
-        for (Item it : items) {
-            if (it != null) {
-                if (points[3].y <= it.maxY && contains(forwardItems,it) == -1){
-                    forwardItems[j] = it;
-                }
-                else if(points[3].y >= it.maxY){
-                    forwardItems[j] = null;
-                }
-            }
-            i ++;
-        }
         for(Point p: points){
             //check if player runs into each building
             for (Building b : buildings) {
@@ -112,7 +58,7 @@ public class MapSystem {
                     }
                 }
             }
-
+            //ITEM COLLISION
             for(Item i : items){
                 if(i != null){
                     if(p.x >i.minX  && p.y > i.minY && p.x  < i.maxX && p.y  < i.maxY){
@@ -120,7 +66,6 @@ public class MapSystem {
                     }
                 }
             }
-
             //boarder check
             if(p.x < minX  || p.y < minY || p.x  > maxX || p.y  > maxY){
                 return false;
