@@ -5,7 +5,7 @@ public class MapSystem {
     MapTile[][] map;
     //forward lists are for render
     Item[] items;
-    float minX,minY,maxX,maxY;
+    float minX,minY,maxX,maxY,grabRange;
     int x,y,w,h,i,j;
     Building[] buildings;
     public MapSystem(mapPresets preset){
@@ -20,6 +20,8 @@ public class MapSystem {
         minY = 0;
         maxX = x*w ;
         maxY = y*h ;
+        //grab range for player for any item
+        grabRange = 35;
         // i-> index of forward buildings array
         // j-> index of background buildings array "buildings"
         i = 0;
@@ -48,6 +50,7 @@ public class MapSystem {
         //counter for items => j
         i = 0;
         j = 0;
+        checkInteractable(points);
 
         for(Point p: points){
             //check if player runs into each building
@@ -75,6 +78,35 @@ public class MapSystem {
 
     }
 
+    public Item playerInteract(){
+        int j = 0;
+        for(Item i : items){
+            if(i != null && i.interactable){
+                Item copy = new Item(i);
+                items[j] = null;
+                return copy;
+            }
+            j++;
+        }
+        return null;
+    }
+
+    public void checkInteractable(Point[] points){
+        for(Item i : items){
+            for(Point p: points) {
+                if (i != null) {
+                    // check if item can interact
+                    if (p.x > i.minX - grabRange && p.y > i.minY - grabRange && p.x < i.maxX + grabRange && p.y < i.maxY + grabRange && !i.interactable) {
+                        i.interactable = true;
+                        break;
+                    } else {
+                        i.interactable = false;
+                    }
+                }
+            }
+        }
+    }
+
     public void resize(double displayWk,double displayHk){
         w *= displayWk;
         h *= displayHk;
@@ -88,17 +120,6 @@ public class MapSystem {
                 map[i][j].resize(displayWk,displayHk);
             }
         }
-    }
-
-    public int contains(Object[] items, Object b){
-        int i = 0;
-        for (Object temp: items) {
-            if(temp == b){
-                return i;
-            }
-            i ++;
-        }
-        return -1;
     }
 
 }

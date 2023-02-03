@@ -73,7 +73,9 @@ public class Animation {
       this.w = w;
       this.h = h;
         for (PImage temp: imgs) {
-          temp.resize(w,h);
+            if(temp != null) {
+                temp.resize(w, h);
+            }
       }
   }
 

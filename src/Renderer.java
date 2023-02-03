@@ -38,6 +38,10 @@ public class Renderer {
     }
 
     public void display(){
+        first = null;
+        addGraphics(Main.engine.currentMap.buildings);
+        addGraphics(Main.engine.currentMap.items);
+        push(Main.engine.player);
         first = mergeSort(first);
         RenderNode pointer = first;
         while(pointer != null){

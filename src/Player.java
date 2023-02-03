@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Player extends Graphic{
-     float x,y,w,h,dx,dy,speed,attack,defense,health,maxHealth,experience,maxExperience;
-     int i,j,level;
-     boolean up,down,left,right;
+     float x,y,w,h,dx,dy,speed,attack,defense,health,maxHealth,experience,maxExperience,grabRange;
+     int i,j,level,itemCount;
+     boolean up,down,left,right,interact;
      Point[] contactPoints;
      Item[] inventory;
      Animation current,rightIdle,leftIdle;
@@ -20,10 +20,12 @@ public class Player extends Graphic{
          speed = 5;
          level = 0;
          experience = 1;
+         grabRange = 10;
          up = false;
          down = false;
          left = false;
          right = false;
+         interact = false;
          dx = 0;
          dy = 0;
          x = 800;
@@ -34,6 +36,7 @@ public class Player extends Graphic{
          w = 49;
          h = 84;
          inventory = new Item[20];
+         itemCount = 0;
          float footY = 20;
          //determine contact points
          contactPoints = new Point[]{
@@ -55,19 +58,18 @@ public class Player extends Graphic{
 
      public void display(){
          checkCoordinates();
+         if(interact){
+             checkinteractions();
+         }
          Main.processing.image(current.display(),x,y);
      }
 
-     public void resize(double displayWK, double displayHK){
-         x *= displayWK;
-         y *= displayHK;
-         w *= displayWK;
-         h *= displayHK;
-         for(Point temp:contactPoints){
-             temp.x *= displayWK;
-             temp.y *= displayHK;
+     public void checkinteractions(){
+         Item copy = Main.engine.currentMap.playerInteract();
+         if(copy != null){
+             inventory[itemCount] = copy;
+             itemCount ++;
          }
-         current.resize(displayWK, displayHK);
      }
 
      public void checkCoordinates(){
@@ -104,6 +106,20 @@ public class Player extends Graphic{
          value = y+h;
 
      }
+
+
+
+    public void resize(double displayWK, double displayHK){
+        x *= displayWK;
+        y *= displayHK;
+        w *= displayWK;
+        h *= displayHK;
+        for(Point temp:contactPoints){
+            temp.x *= displayWK;
+            temp.y *= displayHK;
+        }
+        current.resize(displayWK, displayHK);
+    }
 
 
 

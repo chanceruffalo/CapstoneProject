@@ -32,8 +32,8 @@ public class Main extends PApplet{
 
     public void setup(){
         surface.setTitle("Greener Fields");
-        surface.setResizable(true);
-        surface.setLocation(10, 10);
+       // surface.setResizable(true);
+        surface.setLocation(100, 100);
         thread("loadAssets");
     }
 
@@ -63,6 +63,7 @@ public class Main extends PApplet{
             case 'W' : engine.player.up = true;break;
             case 'S' : engine.player.down = true;break;
             case 'D' : engine.player.right = true;break;
+            case 'F' : engine.player.interact = true;break;
         }
     }
 
@@ -72,6 +73,7 @@ public class Main extends PApplet{
             case 'W' : engine.player.up = false;break;
             case 'S' : engine.player.down = false;break;
             case 'D' : engine.player.right = false;break;
+            case 'F' : engine.player.interact = false;break;
         }
     }
 }
