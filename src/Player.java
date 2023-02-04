@@ -107,6 +107,15 @@ public class Player extends Graphic{
 
      }
 
+     public void useAbility(int ability){
+                 if(inventory[ability] != null){
+                     inventory[ability].use();
+                     if(inventory[ability].uses <= 0){
+                         inventory[ability] = null;
+                     }
+                 }
+             }
+
 
 
     public void resize(double displayWK, double displayHK){

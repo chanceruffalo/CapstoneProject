@@ -5,13 +5,18 @@ public class Item extends Graphic {
     String description,name,address;
     Animation animation,activate;
     Boolean interactable;
+    // statchanges
+    //  [0] , [1] , [2] , [3] , [4] , [5]
+    //   hp , att , def , spd , maxH, experience
     int[] statChanges;
+    int uses;
 
-    public Item(float x,float y,float w,float h, String name,String description, int[] statchanges, String address, float boundaryLX,float boundaryRX, float boundaryUY,float boundaryDY) {
+    public Item(float x,float y,float w,float h, String name,String description, int[] statchanges, String address, float boundaryLX,float boundaryRX, float boundaryUY,float boundaryDY,int uses) {
         this.x = x;
         this.y = y;
         this.w = w;
         this.h = h;
+        this.uses = uses;
         this.boundaryDY = boundaryDY;
         this.boundaryRX = boundaryRX;
         this.boundaryLX = boundaryLX;
@@ -58,6 +63,18 @@ public class Item extends Graphic {
         if(interactable){
             Main.processing.image(activate.display(),x,y);
         }
+    }
+
+    public void use(){
+        //  [0] , [1] , [2] , [3] , [4] , [5]
+        //   hp , att , def , spd , maxH, experience
+        Main.engine.player.health += statChanges[0];
+        Main.engine.player.attack += statChanges[1];
+        Main.engine.player.defense += statChanges[2];
+        Main.engine.player.speed += statChanges[3];
+        Main.engine.player.maxHealth += statChanges[4];
+        Main.engine.player.experience += statChanges[5];
+        uses --;
     }
 
 

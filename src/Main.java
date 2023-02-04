@@ -64,6 +64,16 @@ public class Main extends PApplet{
             case 'S' : engine.player.down = true;break;
             case 'D' : engine.player.right = true;break;
             case 'F' : engine.player.interact = true;break;
+            case '1' : engine.player.useAbility(0);break;
+            case '2' : engine.player.useAbility(1);break;
+            case '3' : engine.player.useAbility(2);break;
+            case '4' : engine.player.useAbility(3);break;
+            case '5' : engine.player.useAbility(4);break;
+            case '6' : engine.player.useAbility(5);break;
+            case '7' : engine.player.useAbility(6);break;
+            case '8' : engine.player.useAbility(7);break;
+            case '9' : engine.player.useAbility(8);break;
+            case '0' : engine.player.useAbility(9);break;
         }
     }
 

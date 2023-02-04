@@ -4,6 +4,8 @@ public class UI {
     float x,y,inventoryBarWidth,inventoryBarHeight;
     float healthBarLength,experienceBarLength;
 
+    Animation inventoryUI;
+
     public UI(){
         x = 5;
         y = 400;
@@ -11,6 +13,7 @@ public class UI {
         experienceBarLength = 100;
         inventoryBarWidth = 150;
         inventoryBarHeight = 40;
+        inventoryUI = new Animation("ImageAssets/inventoryUI",10,290,55);
         //font = Main.processing.createFont("TheConfessionRegular-YBpv.ttf",128);
     }
 
@@ -45,15 +48,17 @@ public class UI {
 
     public void displayPlayerInventory(){
         int slot = 0;
-        Main.processing.fill(0,0,0);
-        Main.processing.rect(295,495,inventoryBarWidth,inventoryBarHeight,5);
+        Main.processing.image(inventoryUI.display(),290,485);
         for(Item item: Main.engine.player.inventory){
             if(item != null){
-                item.animation.setSize(25,25);
-                item.x = 300 + 27*slot;
-                item.y = 500;
+                item.animation.setSize(24,24);
+                item.x = 301 + 27*slot;
+                item.y = 495;
                 slot++;
                 item.display();
+            }
+            else {
+                slot++;
             }
         }
     }
