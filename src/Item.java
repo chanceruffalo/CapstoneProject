@@ -53,6 +53,7 @@ public class Item extends Graphic {
         this.description = i.description;
         this.statChanges = i.statChanges;
         this.interactable = false;
+        this.uses = i.uses;
         this.address = i.address;
         animation = new Animation(address,10,(int)w,(int)h);
         activate = new Animation("ImageAssets/activateBtn",10,15,15);

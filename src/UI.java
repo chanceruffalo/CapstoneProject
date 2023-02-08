@@ -56,6 +56,9 @@ public class UI {
                 item.y = 495;
                 slot++;
                 item.display();
+                Main.processing.textSize(10);
+                Main.processing.fill(250,250,250);
+                Main.processing.text(item.uses,item.x,item.y+5);
             }
             else {
                 slot++;

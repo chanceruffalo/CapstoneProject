@@ -78,7 +78,10 @@ public class MapSystem {
 
     }
 
-    public Item playerInteract(){
+    public Item playerInteract(int emptySpot){
+        if(emptySpot == -1){
+            return null;
+        }
         int j = 0;
         for(Item i : items){
             if(i != null && i.interactable){

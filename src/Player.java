@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Player extends Graphic{
      float x,y,w,h,dx,dy,speed,attack,defense,health,maxHealth,experience,maxExperience,grabRange;
-     int i,j,level,itemCount;
+     int i,j,level,emptySpot;
      boolean up,down,left,right,interact;
      Point[] contactPoints;
      Item[] inventory;
@@ -36,7 +36,7 @@ public class Player extends Graphic{
          w = 49;
          h = 84;
          inventory = new Item[20];
-         itemCount = 0;
+         emptySpot = 0;
          float footY = 20;
          //determine contact points
          contactPoints = new Point[]{
@@ -58,18 +58,37 @@ public class Player extends Graphic{
 
      public void display(){
          checkCoordinates();
-         if(interact){
-             checkinteractions();
-         }
          Main.processing.image(current.display(),x,y);
      }
 
+
      public void checkinteractions(){
-         Item copy = Main.engine.currentMap.playerInteract();
-         if(copy != null){
-             inventory[itemCount] = copy;
-             itemCount ++;
+         emptySpot = emptySpot();
+         Item copy = Main.engine.currentMap.playerInteract(emptySpot);
+         if(copy != null) {
+             boolean haveItem = false;
+             for (Item x : inventory) {
+                 if (x != null && x.name == copy.name) {
+                     haveItem = true;
+                     x.uses += 1;
+                     break;
+                 }
+             }
+             if (!haveItem) {
+                 inventory[emptySpot] = copy;
+             }
          }
+     }
+
+     public int emptySpot(){
+         emptySpot = 0;
+         for(Item x : inventory){
+             if(x == null){
+                 return emptySpot;
+             }
+             emptySpot ++;
+         }
+         return -1;
      }
 
      public void checkCoordinates(){
@@ -113,6 +132,10 @@ public class Player extends Graphic{
                      if(inventory[ability].uses <= 0){
                          inventory[ability] = null;
                      }
+                 }
+                 while(experience >=maxExperience){
+                     level ++;
+                     experience -= maxExperience;
                  }
              }
 
