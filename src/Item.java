@@ -1,10 +1,10 @@
 import processing.core.PImage;
 
-public class Item extends Graphic {
+public class Item extends Graphic  {
     float x,y,w,h,minX,maxX,minY,maxY,boundaryRX,boundaryDY,boundaryLX,boundaryUY;
     String description,name,address;
     Animation animation,activate;
-    Boolean interactable;
+    Boolean interactable,isWeapon;
     // statchanges
     //  [0] , [1] , [2] , [3] , [4] , [5]
     //   hp , att , def , spd , maxH, experience
@@ -27,10 +27,35 @@ public class Item extends Graphic {
         minX = x+boundaryLX;
         minY = y+boundaryUY;
         this.name = name;
+        isWeapon = false;
         this.description = description;
         this.statChanges = statchanges;
         this.interactable = false;
         this.address = address;
+        animation = new Animation(address,10,(int)w,(int)h);
+        activate = new Animation("ImageAssets/activateBtn",10,15,15);
+    }
+    public Item(float x,float y,float w,float h, String name,String description, int[] statchanges, String address, float boundaryLX,float boundaryRX, float boundaryUY,float boundaryDY,boolean isWeapon) {
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
+        this.uses = -1;
+        this.boundaryDY = boundaryDY;
+        this.boundaryRX = boundaryRX;
+        this.boundaryLX = boundaryLX;
+        this.boundaryUY = boundaryUY;
+        maxX = x+w-boundaryRX;
+        maxY = y+h-boundaryDY;
+        value = maxY;
+        minX = x+boundaryLX;
+        minY = y+boundaryUY;
+        this.name = name;
+        this.description = description;
+        this.statChanges = statchanges;
+        this.interactable = false;
+        this.address = address;
+        this.isWeapon = isWeapon;
         animation = new Animation(address,10,(int)w,(int)h);
         activate = new Animation("ImageAssets/activateBtn",10,15,15);
     }
@@ -55,15 +80,21 @@ public class Item extends Graphic {
         this.interactable = false;
         this.uses = i.uses;
         this.address = i.address;
+        this.isWeapon = i.isWeapon;
         animation = new Animation(address,10,(int)w,(int)h);
         activate = new Animation("ImageAssets/activateBtn",10,15,15);
     }
 
         public void display(){
+        if(isWeapon){
+            animation.current = 0;
+        }
         Main.processing.image(animation.display(),x,y);
+
         if(interactable){
             Main.processing.image(activate.display(),x,y);
         }
+
     }
 
     public void use(){

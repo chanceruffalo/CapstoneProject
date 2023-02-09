@@ -16,11 +16,11 @@ public class mapPresets {
         items[1] = new Item(690,200,50,50,"Red Mushroom","Demo this item is for testing",new int[]{ 5,0,0,2,0,5 },"ImageAssets/mushroom",5,5,35,10,1);
         items[2] = new Item(400,400,50,50,"Red Mushroom","Demo this item is for testing",new int[]{ 5,0,0,2,0,5 },"ImageAssets/mushroom",5,5,35,10,1);
         items[3] = new Item(450,375,50,50,"Red Mushroom","Demo this item is for testing",new int[]{ 5,0,0,2,0,5  },"ImageAssets/mushroom",5,5,35,10,1);
-        items[4] = new Item(500,375,44,26,"Blue waterCan","Demo this item is for testing",new int[]{ 10,0,0,2,0,100  },"ImageAssets/watercan",5,5,35,10,1);
+        items[4] = new Item(500,375,25,15,"Blue waterCan","Demo this item is for testing",new int[]{ 10,0,0,2,0,1000 },"ImageAssets/watercan",5,5,35,10,true);
 
         buildings = new Building[5];
-        buildings[0] = new Building(200,-5,225,225,"ImageAssets/greenhouse",10,10,20,100,10);
-        buildings[1] = new Building(-10,-30,300,250,"ImageAssets/tree",10,30,160,230,10);
+        buildings[1] = new Building(200,-5,225,225,"ImageAssets/greenhouse",10,10,20,100,10);
+        buildings[0] = new Building(-10,-30,300,250,"ImageAssets/tree",10,30,160,230,10);
         // Tile presets
         home = new int[][]
                 {{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1},

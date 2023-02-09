@@ -9,6 +9,8 @@ public class Player extends Graphic{
      boolean up,down,left,right,interact;
      Point[] contactPoints;
      Item[] inventory;
+     Weapon weapon;
+
      Animation current,rightIdle,leftIdle;
 
      public Player(){
@@ -37,6 +39,7 @@ public class Player extends Graphic{
          h = 84;
          inventory = new Item[20];
          emptySpot = 0;
+         weapon = null;
          float footY = 20;
          //determine contact points
          contactPoints = new Point[]{
@@ -59,6 +62,9 @@ public class Player extends Graphic{
      public void display(){
          checkCoordinates();
          Main.processing.image(current.display(),x,y);
+         if(weapon != null){
+             weapon.display();
+         }
      }
 
 
@@ -127,10 +133,18 @@ public class Player extends Graphic{
      }
 
      public void useAbility(int ability){
-                 if(inventory[ability] != null){
-                     inventory[ability].use();
-                     if(inventory[ability].uses <= 0){
-                         inventory[ability] = null;
+         Item currentItem = inventory[ability];
+                 if(currentItem != null){
+                     //check if item trying to be used in a weapon and equiping if so
+                     if(currentItem.isWeapon == true){
+                         weapon = new Weapon(inventory[ability]);
+                     }
+                     //if not item just use item
+                     else {
+                         inventory[ability].use();
+                         if (inventory[ability].uses <= 0) {
+                             inventory[ability] = null;
+                         }
                      }
                  }
                  while(experience >=maxExperience){

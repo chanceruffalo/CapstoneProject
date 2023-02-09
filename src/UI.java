@@ -13,42 +13,24 @@ public class UI {
         experienceBarLength = 100;
         inventoryBarWidth = 150;
         inventoryBarHeight = 40;
-        inventoryUI = new Animation("ImageAssets/inventoryUI",10,290,55);
+        inventoryUI = new Animation("ImageAssets/inventoryUI",10,290,70);
         //font = Main.processing.createFont("TheConfessionRegular-YBpv.ttf",128);
     }
 
     public void display(){
         displayPlayerInventory();
-        //Main.processing.textFont(font);
-        Main.processing.textSize(15);
-            //health bar settings
-        //health bar text
-        Main.processing.fill(255,255,255);
-        Main.processing.rect(x-2,y-18,120,20);
-        //text health
-        Main.processing.fill(0,0,0);
-        float pHealthK= (Main.engine.player.health / Main.engine.player.maxHealth);
-        Main.processing.text("Health: " + Main.engine.player.health + "/"+ Main.engine.player.maxHealth,x,y);
-        //healthbar
-        Main.processing.rect(x-2,y+5,healthBarLength,10);
-        Main.processing.fill(250,0,0);
-        Main.processing.rect(x-2,y+5, (healthBarLength*pHealthK),10);
-
-            //Experience settings
-        //experience bar text
-        Main.processing.fill(255,255,255);
-        Main.processing.rect(x-2,y+32,100,20);
-        Main.processing.fill(0,0,0);
-        Main.processing.text("Level: " + Main.engine.player.level ,x,y+50);
-        //experiencebar
-        Main.processing.rect(x-2,y+55,healthBarLength,10);
-        Main.processing.fill(0,0,250);
-        Main.processing.rect(x-2,y+55, experienceBarLength*(Main.engine.player.experience/Main.engine.player.maxExperience),10);
-    }
+        }
 
     public void displayPlayerInventory(){
         int slot = 0;
-        Main.processing.image(inventoryUI.display(),290,485);
+        Main.processing.fill(250,0,0);
+        float pHealthK= (Main.engine.player.health / Main.engine.player.maxHealth);
+        Main.processing.rect(x+293,y+70, (healthBarLength*pHealthK),20);
+        Main.processing.fill(0,0,250);
+        Main.processing.rect(x+450,y+70, experienceBarLength*(Main.engine.player.experience/Main.engine.player.maxExperience),18);
+
+
+        Main.processing.image(inventoryUI.display(),290,470);
         for(Item item: Main.engine.player.inventory){
             if(item != null){
                 item.animation.setSize(24,24);
@@ -63,6 +45,14 @@ public class UI {
             else {
                 slot++;
             }
+        }
+        Main.processing.textSize(15);
+        Main.processing.fill(0,0,0);
+        if(Main.engine.player.level > 9){
+            Main.processing.text( Main.engine.player.level ,x+ 422,y+84);
+        }
+        else{
+            Main.processing.text( Main.engine.player.level ,x+ 426,y+84);
         }
     }
 }
