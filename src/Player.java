@@ -45,7 +45,7 @@ public class Player extends Graphic{
          contactPoints = new Point[]{
                  //left side
                  new Point(x,y+h-footY),new Point(x,y + h - (footY/2)),new Point(x,y + h - (footY/4)),new Point(x,y + h),new Point(x,y + h - 3*(footY/4)),
-                //right side
+                 //right side
                  new Point(x+w,y+h-footY),new Point(x+w,y + h - (footY/2)),new Point(x+w,y + h - (footY/4)),new Point(x+w,y + h),new Point(x+w,y + h - 3*(footY/4)),
                  //up side
                  new Point(x+w,y+h-footY),new Point(x+w/4,y+h-footY),new Point(x+w/2,y+h-footY),new Point(x+3*(w/4),y+h-footY),
@@ -53,8 +53,8 @@ public class Player extends Graphic{
                  new Point(x+w,y+h),new Point(x+w/4,y+h),new Point(x+w/2,y+h),new Point(x+3*(w/4),y+h), new Point(x + w,y+h)
          };
 
-         rightIdle = new Animation("ImageAssets/MC1_",2,(int)w,(int)h);
-         leftIdle = new Animation("ImageAssets/MC1_right",2,(int)w,(int)h);
+         rightIdle = new Animation("ImageAssets/MC1_",1,(int)w,(int)h);
+         leftIdle = new Animation("ImageAssets/MC1_right",1,(int)w,(int)h);
          current = leftIdle;
 
      }
@@ -118,6 +118,8 @@ public class Player extends Graphic{
          }
          x += dx;
          y += dy;
+         //check if an item can be interacted with
+         Main.engine.currentMap.checkInteractable(contactPoints);
          if(!Main.engine.currentMap.checkBoarder(contactPoints)){
              for(Point p:contactPoints){
                  p.x -= dx;
@@ -135,6 +137,7 @@ public class Player extends Graphic{
      public void useAbility(int ability){
          Item currentItem = inventory[ability];
                  if(currentItem != null){
+                     Main.engine.ui.abilityHighlight = ability;
                      //check if item trying to be used in a weapon and equiping if so
                      if(currentItem.isWeapon == true){
                          weapon = new Weapon(inventory[ability]);
@@ -152,6 +155,12 @@ public class Player extends Graphic{
                      experience -= maxExperience;
                  }
              }
+
+     public void useWeapon(float mouseX,float mouseY){
+         if(weapon != null){
+            weapon.use(mouseX,mouseY);
+         }
+     }
 
 
 

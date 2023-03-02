@@ -41,6 +41,8 @@ public class Renderer {
         first = null;
         addGraphics(Main.engine.currentMap.buildings);
         addGraphics(Main.engine.currentMap.items);
+        addGraphics(Main.engine.currentMap.bullets);
+        addGraphics(Main.engine.currentMap.baddies);
         push(Main.engine.player);
         first = mergeSort(first);
         RenderNode pointer = first;

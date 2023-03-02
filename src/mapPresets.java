@@ -1,26 +1,40 @@
 import java.util.Hashtable;
+import java.util.Random;
 
 public class mapPresets {
     int[][] current,home;
     String[] assets;
     Building[] buildings;
     Item[] items;
+    Enemy[] baddies;
     int w,h;
+    float minX, minY,maxX,maxY;
+    Random random;
     public mapPresets(){
+        random = new Random();
         w = 960/20;
         h = 540/11;
-        items = new Item[5];
-        //  [0] , [1] , [2] , [3] , [4] , [5]
-        //   hp , att , def , spd , maxH, experience
+        minX = 0;
+        minY=150;
+        maxX = 960;
+        maxY = 540;
+        // statchanges
+        //  [0] , [1] , [2] , [3] , [4] , [5] , [6] , [7]
+        //   hp , att , def , spd , maxH, exp , proW, Projectile Height
+        items = new Item[10];
         items[0] = new Item(675,300,50,50,"Red Mushroom","Demo this item is for testing",new int[]{ 5,0,0,2,0,5 },"ImageAssets/mushroom",5,5,35,10,1);
         items[1] = new Item(690,200,50,50,"Red Mushroom","Demo this item is for testing",new int[]{ 5,0,0,2,0,5 },"ImageAssets/mushroom",5,5,35,10,1);
         items[2] = new Item(400,400,50,50,"Red Mushroom","Demo this item is for testing",new int[]{ 5,0,0,2,0,5 },"ImageAssets/mushroom",5,5,35,10,1);
         items[3] = new Item(450,375,50,50,"Red Mushroom","Demo this item is for testing",new int[]{ 5,0,0,2,0,5  },"ImageAssets/mushroom",5,5,35,10,1);
-        items[4] = new Item(500,375,25,15,"Blue waterCan","Demo this item is for testing",new int[]{ 10,0,0,2,0,1000 },"ImageAssets/watercan",5,5,35,10,true);
-
+        items[4] = new Item(500,375,25,15,"Blue waterCan","Demo this item is for testing",new int[]{ 10,0,0,2,0,0,20,20 },"ImageAssets/watercan",5,5,35,10,true,"shoot");
+        items[5] = new Item(870,200,50,50,"Sign Post","Interact to move to next area.",new int[]{},"ImageAssets/signPost",5,5,20,5,"teleport: level1");
+        //all buildings
         buildings = new Building[5];
-        buildings[1] = new Building(200,-5,225,225,"ImageAssets/greenhouse",10,10,20,100,10);
-        buildings[0] = new Building(-10,-30,300,250,"ImageAssets/tree",10,30,160,230,10);
+        buildings[0 ] = new Building(200,85,310,204,"ImageAssets/greenhouse",10,10,80,100,10);
+        buildings[1] = new Building(-10,10,300,250,"ImageAssets/tree",10,30,160,230,10);
+        //all enemies
+        baddies = new Enemy[5];
+        baddies[0] = new Enemy(600,200,59,66,3,5,0,10,10,5,null,3,"ImageAssets/reaperEnemy");
         // Tile presets
         home = new int[][]
                 {{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1},
@@ -35,15 +49,36 @@ public class mapPresets {
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,1},
                 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,1},
                 {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1}};
+
+        for(int i = 0; i < 12; i ++){
+            for(int j = 0; j < 21; j ++){
+                if(i == 1){
+                    home[i][j] = 5;
+                }
+                else if(i == 2){
+                    home[i][j] = 1;
+                }
+                else{
+                    int taddress = random.nextInt(10)+1;
+                    while(taddress == 1 ||taddress == 5){
+                        taddress = random.nextInt(4)+1;
+                    }
+                    if(taddress > 4){
+                        taddress = 6;
+                    }
+                    home[i][j] = taddress;
+                }
+            }
+        }
         // Image addresses
         assets = new String[10];
         assets[0] = "ImageAssets/newGrass";
         assets[1] = "ImageAssets/newGrassUpperWall";
-        assets[2] = "ImageAssets/greenGrassboarderUpperLeftCorner_";
-        assets[3] = "ImageAssets/greenGrassboarderUpperRightCorner_";
-        assets[4] = "ImageAssets/greenGrassboarderLowerRightCorner_";
-        assets[5] = "ImageAssets/greenGrassboarderLowerLeftCorner_";
-        assets[6] = "ImageAssets/greenGrassboarderRight_";
+        assets[2] = "ImageAssets/newGrass2";
+        assets[3] = "ImageAssets/newGrass3";
+        assets[4] = "ImageAssets/newGrass4";
+        assets[5] = "ImageAssets/newGrassUpperWall2";
+        assets[6] = "ImageAssets/newGrass5";
         assets[7] = "ImageAssets/greenGrassboarderDown_";
         assets[8] = "ImageAssets/greenGrassboarderLeft_";
         // map to load

@@ -2,7 +2,7 @@ import processing.core.PImage;
 
 public class Item extends Graphic  {
     float x,y,w,h,minX,maxX,minY,maxY,boundaryRX,boundaryDY,boundaryLX,boundaryUY;
-    String description,name,address;
+    String description,name,address,power;
     Animation animation,activate;
     Boolean interactable,isWeapon;
     // statchanges
@@ -11,6 +11,7 @@ public class Item extends Graphic  {
     int[] statChanges;
     int uses;
 
+    //constructor for a consumable item
     public Item(float x,float y,float w,float h, String name,String description, int[] statchanges, String address, float boundaryLX,float boundaryRX, float boundaryUY,float boundaryDY,int uses) {
         this.x = x;
         this.y = y;
@@ -32,10 +33,12 @@ public class Item extends Graphic  {
         this.statChanges = statchanges;
         this.interactable = false;
         this.address = address;
+        power = "use";
         animation = new Animation(address,10,(int)w,(int)h);
         activate = new Animation("ImageAssets/activateBtn",10,15,15);
     }
-    public Item(float x,float y,float w,float h, String name,String description, int[] statchanges, String address, float boundaryLX,float boundaryRX, float boundaryUY,float boundaryDY,boolean isWeapon) {
+    //constructor for a weapon
+    public Item(float x,float y,float w,float h, String name,String description, int[] statchanges, String address, float boundaryLX,float boundaryRX, float boundaryUY,float boundaryDY,boolean isWeapon,String power) {
         this.x = x;
         this.y = y;
         this.w = w;
@@ -55,10 +58,39 @@ public class Item extends Graphic  {
         this.statChanges = statchanges;
         this.interactable = false;
         this.address = address;
+        // power will be either shoot or slash
+        this.power = power;
         this.isWeapon = isWeapon;
         animation = new Animation(address,10,(int)w,(int)h);
         activate = new Animation("ImageAssets/activateBtn",10,15,15);
     }
+    //special case items that have special uses
+    public Item(float x,float y,float w,float h, String name,String description, int[] statchanges, String address, float boundaryLX,float boundaryRX, float boundaryUY,float boundaryDY,String power) {
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
+        this.uses = -1;
+        this.boundaryDY = boundaryDY;
+        this.boundaryRX = boundaryRX;
+        this.boundaryLX = boundaryLX;
+        this.boundaryUY = boundaryUY;
+        maxX = x+w-boundaryRX;
+        maxY = y+h-boundaryDY;
+        value = maxY;
+        minX = x+boundaryLX;
+        minY = y+boundaryUY;
+        this.name = name;
+        this.description = description;
+        this.statChanges = statchanges;
+        this.interactable = false;
+        this.address = address;
+        this.isWeapon = false;
+        this.power = power;
+        animation = new Animation(address,10,(int)w,(int)h);
+        activate = new Animation("ImageAssets/activateBtn",10,15,15);
+    }
+
     //copy constructor
     public Item(Item i){
         this.x = i.x;
@@ -81,6 +113,7 @@ public class Item extends Graphic  {
         this.uses = i.uses;
         this.address = i.address;
         this.isWeapon = i.isWeapon;
+        this.power = i.power;
         animation = new Animation(address,10,(int)w,(int)h);
         activate = new Animation("ImageAssets/activateBtn",10,15,15);
     }
@@ -98,15 +131,18 @@ public class Item extends Graphic  {
     }
 
     public void use(){
-        //  [0] , [1] , [2] , [3] , [4] , [5]
-        //   hp , att , def , spd , maxH, experience
-        Main.engine.player.health += statChanges[0];
-        Main.engine.player.attack += statChanges[1];
-        Main.engine.player.defense += statChanges[2];
-        Main.engine.player.speed += statChanges[3];
-        Main.engine.player.maxHealth += statChanges[4];
-        Main.engine.player.experience += statChanges[5];
-        uses --;
+        if(power.equals("use")) {
+            // statchanges
+            //  [0] , [1] , [2] , [3] , [4] , [5] , [6] , [7]
+            //   hp , att , def , spd , maxH, exp , proW, Projectile Height
+            Main.engine.player.health += statChanges[0];
+            Main.engine.player.attack += statChanges[1];
+            Main.engine.player.defense += statChanges[2];
+            Main.engine.player.speed += statChanges[3];
+            Main.engine.player.maxHealth += statChanges[4];
+            Main.engine.player.experience += statChanges[5];
+            uses--;
+        }
     }
 
 

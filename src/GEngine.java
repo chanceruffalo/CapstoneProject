@@ -12,9 +12,11 @@ public class GEngine {
         player = new Player();
         ui = new UI();
         renderer = new Renderer();
-        renderer.addGraphics(currentMap.buildings);
-        renderer.addGraphics(currentMap.items);
-        renderer.push(player);
+      //  renderer.addGraphics(currentMap.buildings);
+       // renderer.addGraphics(currentMap.items);
+      //  renderer.addGraphics(currentMap.bullets);
+      //  renderer.addGraphics(currentMap.baddies);
+       // renderer.push(player);
     }
 
     public void start(){
@@ -26,6 +28,16 @@ public class GEngine {
     public void resize(double displayWk,double displayHk){
         currentMap.resize(displayWk,displayHk);
         player.resize(displayWk,displayHk);
+    }
+
+    public void mousepressed(float mouseX,float mouseY){
+
+    }
+
+    public void mousereleased(float mouseX, float mouseY){
+        if(Main.loads){
+            player.useWeapon(mouseX,mouseY);
+        }
     }
 
 

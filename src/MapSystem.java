@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.Random;
 
 public class MapSystem {
 
@@ -8,6 +9,9 @@ public class MapSystem {
     float minX,minY,maxX,maxY,grabRange;
     int x,y,w,h,i,j;
     Building[] buildings;
+    Enemy[] baddies;
+    Projectile[] bullets;
+    int bulletCount;
     public MapSystem(mapPresets preset){
         //x , y are tiles counts for map
         x = 20;
@@ -22,6 +26,7 @@ public class MapSystem {
         maxY = y*h ;
         //grab range for player for any item
         grabRange = 35;
+        bulletCount =0;
         // i-> index of forward buildings array
         // j-> index of background buildings array "buildings"
         i = 0;
@@ -29,12 +34,41 @@ public class MapSystem {
         map = new MapTile[x][y];
         buildings = preset.buildings;
         items = preset.items;
+        baddies = preset.baddies;
+        bullets = new Projectile[20];
+        bulletCount = 0;
+        Random random = new Random();
         for(int j = 0; j < y; j ++){
             for(int i = 0; i < x; i ++){
                 MapTile temp = new MapTile(i*w, j * h, i, j, w, h,preset.assets[preset.home[j][i]],20);
+                temp.animation.current = random.nextInt(temp.animation.maxFrames);
                 map[i][j] = temp;
             }
         }
+        minX = preset.minX;
+        minY = preset.minY;
+        maxX = preset.maxX;
+        maxY = preset.maxY;
+
+    }
+
+    public void addBullet(Projectile bullet){
+        int bulletC =0;
+        for(Projectile proj: bullets){
+            if(proj == null){
+                break;
+            }
+            bulletC ++;
+        }
+        bullet.index = bulletC;
+        bullets[bulletC] = bullet;
+        bulletCount ++;
+    }
+
+    public void deleteProjectile(int index){
+        int i = 0;
+        bullets[index] = null;
+        bulletCount --;
     }
 
     public void displayBackground() {
@@ -50,7 +84,6 @@ public class MapSystem {
         //counter for items => j
         i = 0;
         j = 0;
-        checkInteractable(points);
 
         for(Point p: points){
             //check if player runs into each building
@@ -75,7 +108,17 @@ public class MapSystem {
             }
         }
         return true;
+    }
 
+    public boolean checkBulletCollision(Projectile p){
+        for (Building b : buildings) {
+            if(b != null){
+                if(p.x >b.minX  && p.y > b.minY && p.x  < b.maxX && p.y  < b.maxY){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public Item playerInteract(int emptySpot){
@@ -94,6 +137,7 @@ public class MapSystem {
         return null;
     }
 
+    //here will check the items in map and make themm interactable
     public void checkInteractable(Point[] points){
         for(Item i : items){
             for(Point p: points) {

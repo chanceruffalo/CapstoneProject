@@ -18,6 +18,7 @@ public class Main extends PApplet{
     }
     public void settings(){
         //play window:h540, player hub: h200
+
         originalW = 960;
         originalH = 540;
         displayWK = 1.0;
@@ -34,6 +35,7 @@ public class Main extends PApplet{
         surface.setTitle("Greener Fields");
        // surface.setResizable(true);
         surface.setLocation(100, 100);
+
         thread("loadAssets");
     }
 
@@ -57,6 +59,14 @@ public class Main extends PApplet{
         engine.resize(displayWK,displayHK);
     }
 
+    public void mousePressed(){
+        engine.mousepressed(mouseX,mouseY);
+    }
+
+    public void mouseReleased(){
+        engine.mousereleased(mouseX,mouseY);
+    }
+
     public void keyPressed(){
         switch(keyCode){
             case 'A' : engine.player.left = true;break;
@@ -74,6 +84,7 @@ public class Main extends PApplet{
             case '8' : engine.player.useAbility(7);break;
             case '9' : engine.player.useAbility(8);break;
             case '0' : engine.player.useAbility(9);break;
+            case ' ' : engine.player.useWeapon(mouseX, mouseY);
         }
     }
 
