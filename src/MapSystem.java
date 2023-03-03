@@ -13,6 +13,7 @@ public class MapSystem {
     Projectile[] bullets;
     int bulletCount;
     public MapSystem(mapPresets preset){
+
         //x , y are tiles counts for map
         x = 20;
         y = 11;
@@ -20,10 +21,10 @@ public class MapSystem {
         w = 960/20;
         h = 540/11;
         //boundaries
-        minX = 0;
-        minY = 0;
-        maxX = x*w ;
-        maxY = y*h ;
+        minX = preset.minX;
+        minY = preset.minY;
+        maxX = preset.maxX;
+        maxY = preset.maxY;
         //grab range for player for any item
         grabRange = 35;
         bulletCount =0;
@@ -40,15 +41,11 @@ public class MapSystem {
         Random random = new Random();
         for(int j = 0; j < y; j ++){
             for(int i = 0; i < x; i ++){
-                MapTile temp = new MapTile(i*w, j * h, i, j, w, h,preset.assets[preset.home[j][i]],20);
+                MapTile temp = new MapTile(i*w, j * h, i, j, w, h,preset.assets[preset.current[j][i]],20);
                 temp.animation.current = random.nextInt(temp.animation.maxFrames);
                 map[i][j] = temp;
             }
         }
-        minX = preset.minX;
-        minY = preset.minY;
-        maxX = preset.maxX;
-        maxY = preset.maxY;
 
     }
 
@@ -120,17 +117,26 @@ public class MapSystem {
         }
         return false;
     }
-
+//checks if a player can interact with an item and perform interaction if permitted
     public Item playerInteract(int emptySpot){
         if(emptySpot == -1){
             return null;
         }
         int j = 0;
         for(Item i : items){
-            if(i != null && i.interactable){
-                Item copy = new Item(i);
-                items[j] = null;
-                return copy;
+            if(i != null && i.interactable && i.power.length() < 6){
+                    Item copy = new Item(i);
+                    items[j] = null;
+                    return copy;
+            }//Here are special item powers code
+            else if(i != null && i.interactable && i.power.substring(0,8).equals("teleport")){
+                String port = i.power.substring(10,i.power.length());
+                if(port.equals("level1")) {
+                    Main.engine.changeMap(1);
+                }
+                else if(port.equals("base")) {
+                    Main.engine.changeMap(0);
+                }
             }
             j++;
         }
