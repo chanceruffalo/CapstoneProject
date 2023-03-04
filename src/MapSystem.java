@@ -133,9 +133,11 @@ public class MapSystem {
                 String port = i.power.substring(10,i.power.length());
                 if(port.equals("level1")) {
                     Main.engine.changeMap(1);
+                    break;
                 }
                 else if(port.equals("base")) {
                     Main.engine.changeMap(0);
+                    break;
                 }
             }
             j++;

@@ -117,7 +117,8 @@ public class mapPresets {
     public void level1(){
         items = new Item[10];
         items[5] = new Item(70,200,50,50,"Sign Post","Interact to move to next area.",new int[]{},"ImageAssets/signPost",5,5,20,5,"teleport: base");
-
+        items[1] = new Item(690,200,50,50,"Red Mushroom","Demo this item is for testing",new int[]{ 5,0,0,2,0,5 },"ImageAssets/mushroom",5,5,35,10,1);
+        items[2] = new Item(400,400,50,50,"Red Mushroom","Demo this item is for testing",new int[]{ 5,0,0,2,0,5 },"ImageAssets/mushroom",5,5,35,10,1);
         buildings = new Building[5];
         baddies = new Enemy[5];
         baddies[0] = new Enemy(600,200,59,66,3,5,0,10,10,5,null,3,"ImageAssets/reaperEnemy");

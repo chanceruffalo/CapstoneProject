@@ -1,6 +1,6 @@
 public class GEngine {
 
-    MapSystem currentMap;
+    MapSystem currentMap,base,level1;
     mapPresets mappresets,mp2;
     Renderer renderer;
     static Player player;
@@ -8,6 +8,7 @@ public class GEngine {
 
     public GEngine(){
         mappresets = new mapPresets();
+        //base = new MapSystem(mappresets);
         currentMap = new MapSystem(mappresets);
         player = new Player();
         ui = new UI();
@@ -28,13 +29,18 @@ public class GEngine {
     public void changeMap(int x){
 
         if( x == 0){
-            currentMap = new MapSystem(mappresets);
+            currentMap = base;
+            //player x,y start location
+            player.moveLocation(870,220);
         }
         else {
+            base = currentMap;
             mp2 = new mapPresets();
             mp2.changeCurrent(x);
             currentMap = new MapSystem(mp2);
+            player.moveLocation(870,220);
         }
+
     }
 
     public void mousepressed(float mouseX,float mouseY){

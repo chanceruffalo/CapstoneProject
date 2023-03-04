@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Player extends Graphic{
-     float x,y,w,h,dx,dy,speed,attack,defense,health,maxHealth,experience,maxExperience,grabRange;
+     float x,y,w,h,dx,dy,speed,attack,defense,health,maxHealth,experience,maxExperience,grabRange,footY;
      int i,j,level,emptySpot;
      boolean up,down,left,right,interact;
      Point[] contactPoints;
@@ -40,7 +40,7 @@ public class Player extends Graphic{
          inventory = new Item[20];
          emptySpot = 0;
          weapon = null;
-         float footY = 20;
+         footY = 20;
          //determine contact points
          contactPoints = new Point[]{
                  //left side
@@ -85,6 +85,21 @@ public class Player extends Graphic{
              }
          }
      }
+     //move location
+    public void moveLocation(float x, float y){
+         this.x = x;
+         this.y = y;
+        contactPoints = new Point[]{
+                //left side
+                new Point(x,y+h-footY),new Point(x,y + h - (footY/2)),new Point(x,y + h - (footY/4)),new Point(x,y + h),new Point(x,y + h - 3*(footY/4)),
+                //right side
+                new Point(x+w,y+h-footY),new Point(x+w,y + h - (footY/2)),new Point(x+w,y + h - (footY/4)),new Point(x+w,y + h),new Point(x+w,y + h - 3*(footY/4)),
+                //up side
+                new Point(x+w,y+h-footY),new Point(x+w/4,y+h-footY),new Point(x+w/2,y+h-footY),new Point(x+3*(w/4),y+h-footY),
+                // down side
+                new Point(x+w,y+h),new Point(x+w/4,y+h),new Point(x+w/2,y+h),new Point(x+3*(w/4),y+h), new Point(x + w,y+h)
+        };
+    }
 
      public int emptySpot(){
          emptySpot = 0;
