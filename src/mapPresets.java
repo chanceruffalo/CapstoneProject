@@ -97,10 +97,10 @@ public class mapPresets {
     public void base(){
         //all buildings
         buildings = new Building[5];
-        buildings[0 ] = new Building(200,85,310,204,"ImageAssets/greenhouse",10,10,80,100,10);
+        buildings[0] = new Building(200,85,310,204,"ImageAssets/greenhouse",10,10,80,100,10);
         buildings[1] = new Building(-10,10,300,250,"ImageAssets/tree",10,30,160,230,10);
         //all enemies
-        baddies = new Enemy[5];
+        baddies = new Enemy[0];
 
         assets = new String[10];
         assets[0] = "ImageAssets/newGrass";

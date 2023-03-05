@@ -2,9 +2,9 @@ public class Enemy extends Graphic{
     float x,y,w,h,dx,dy,speed,attack,defense,health,maxHealth,experience;
     int i,j,level,movementCounter;
     boolean up,down,left,right,playerSpotted;
+    Point[] contactPoints,viewPoints;
     Weapon weapon;
     Animation current, rightIdle,leftIdle;
-    Point[] contactPoints;
     public Enemy(float x, float y,float w, float h,float speed, float attack, float defense, float health, float maxHealth, float experience, Weapon weapon, int level,String address){
         this.x = x;
         this.y = y;
@@ -45,18 +45,58 @@ public class Enemy extends Graphic{
     }
 
     public void display(){
-        move();
+
+        move(look());
+        //render value for displaying properly
         value = y + h;
         Main.processing.image(current.display(),x,y);
     }
+    // update view points based on direction
+    public String look(){
+        float xView = 400;
+        float yView = 400;
+        //if looking left
+        if(current == leftIdle) {
+            //code to see the field of vision
+            Main.processing.stroke(0);
+            Main.processing.noFill();
+            Main.processing.rect(x - xView+w/2,y - yView/2 + h/2,xView,yView);
+            for (Point p : Main.engine.player.viewPoints) {
+                if((p.x >  x - xView+w/2 && p.x < x + w/2)&&(p.y > y-yView/2 + h/2 && p.y < y+yView/2+h/2)){
+                    Main.processing.fill(0);
+                    Main.processing.rect(x - xView+w/2,y - yView/2 + h/2,xView,yView);
+                    return "spotted";
+                }
 
-    public void move(){
-        if(!playerSpotted){
-            getDxy();
+            }
+        }
+        //if looking right
+        else{
+            Main.processing.stroke(0);
+            Main.processing.noFill();
+            Main.processing.rect(x + w/2,y - yView/2 + h/2,xView,yView);
+            for (Point p : Main.engine.player.viewPoints) {
+                if((p.x <  x + xView+w/2 && p.x > x + w/2)&&(p.y > y-yView/2 + h/2 && p.y < y+yView/2+h/2)){
+                    Main.processing.fill(0);
+                    Main.processing.rect(x + w/2,y - yView/2 + h/2,xView,yView);
+                    return "spotted";
+                }
+
+            }
+        }
+        return "nothing";
+
+    }
+    public void move(String behavior){
+        if(behavior.equals("spotted")){
 
 
 
         }
+        else{
+            getDxy();
+        }
+
     }
 
     public void getDxy(){

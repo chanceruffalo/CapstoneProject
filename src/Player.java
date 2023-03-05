@@ -7,7 +7,7 @@ public class Player extends Graphic{
      float x,y,w,h,dx,dy,speed,attack,defense,health,maxHealth,experience,maxExperience,grabRange,footY;
      int i,j,level,emptySpot;
      boolean up,down,left,right,interact;
-     Point[] contactPoints;
+     Point[] contactPoints,viewPoints;
      Item[] inventory;
      Weapon weapon;
 
@@ -41,6 +41,9 @@ public class Player extends Graphic{
          emptySpot = 0;
          weapon = null;
          footY = 20;
+         viewPoints = new Point[]{
+                 new Point(x,y),new Point(x+w,y),new Point(x,y+h), new Point(x+w,y+h)
+         };
          //determine contact points
          contactPoints = new Point[]{
                  //left side
@@ -99,6 +102,9 @@ public class Player extends Graphic{
                 // down side
                 new Point(x+w,y+h),new Point(x+w/4,y+h),new Point(x+w/2,y+h),new Point(x+3*(w/4),y+h), new Point(x + w,y+h)
         };
+        viewPoints = new Point[]{
+                new Point(x,y),new Point(x+w,y),new Point(x,y+h), new Point(x+w,y+h)
+        };
     }
 
      public int emptySpot(){
@@ -131,12 +137,20 @@ public class Player extends Graphic{
              p.x += dx;
              p.y += dy;
          }
+         for(Point p:viewPoints){
+             p.x += dx;
+             p.y += dy;
+         }
          x += dx;
          y += dy;
          //check if an item can be interacted with
          Main.engine.currentMap.checkInteractable(contactPoints);
          if(!Main.engine.currentMap.checkBoarder(contactPoints)){
              for(Point p:contactPoints){
+                 p.x -= dx;
+                 p.y -= dy;
+             }
+             for(Point p:viewPoints){
                  p.x -= dx;
                  p.y -= dy;
              }
@@ -160,6 +174,11 @@ public class Player extends Graphic{
                      //if not item just use item
                      else {
                          inventory[ability].use();
+                         //check if max health has been achieved
+                         if(health > maxHealth){
+                             health = maxHealth;
+                         }
+                         //check if item has been used up
                          if (inventory[ability].uses <= 0) {
                              inventory[ability] = null;
                          }
