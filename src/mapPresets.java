@@ -10,8 +10,11 @@ public class mapPresets {
     int w,h;
     float minX, minY,maxX,maxY;
     Random random;
+    Animation mapBoarder;
 
     public mapPresets(){
+        mapBoarder = null;
+        //default to base map
         random = new Random();
         w = 960/20;
         h = 540/11;
@@ -23,12 +26,8 @@ public class mapPresets {
         //  [0] , [1] , [2] , [3] , [4] , [5] , [6] , [7]
         //   hp , att , def , spd , maxH, exp , proW, Projectile Height
         items = new Item[10];
-        items[0] = new Item(675,300,50,50,"Red Mushroom","Demo this item is for testing",new int[]{ 5,0,0,2,0,5 },"ImageAssets/mushroom",5,5,35,10,1);
-        items[1] = new Item(690,200,50,50,"Red Mushroom","Demo this item is for testing",new int[]{ 5,0,0,2,0,5 },"ImageAssets/mushroom",5,5,35,10,1);
-        items[2] = new Item(400,400,50,50,"Red Mushroom","Demo this item is for testing",new int[]{ 5,0,0,2,0,5 },"ImageAssets/mushroom",5,5,35,10,1);
-        items[3] = new Item(450,375,50,50,"Red Mushroom","Demo this item is for testing",new int[]{ 5,0,0,2,0,5  },"ImageAssets/mushroom",5,5,35,10,1);
-        items[4] = new Item(500,375,25,15,"Blue waterCan","Demo this item is for testing",new int[]{ 10,0,0,2,0,0,20,20 },"ImageAssets/watercan",5,5,35,10,true,"shoot");
-        items[5] = new Item(870,200,50,50,"Sign Post","Interact to move to next area.",new int[]{},"ImageAssets/signPost",5,5,20,5,"teleport: level1");
+        items[0] = new Item(500,375,25,15,"Blue waterCan","Demo this item is for testing",new int[]{ 10,0,0,2,0,0,20,20 },"ImageAssets/watercan",5,5,35,10,true,"shoot");
+        items[1] = new Item(870,200,50,50,"Sign Post","Interact to move to next area.",new int[]{},"ImageAssets/signPost",5,5,20,5,"teleport: level1");
         //all buildings
         buildings = new Building[5];
         buildings[0 ] = new Building(200,85,310,204,"ImageAssets/greenhouse",10,10,80,100,10);
@@ -95,13 +94,14 @@ public class mapPresets {
     }
     //diffrent levels and maps to be displayed
     public void base(){
+
         //all buildings
         buildings = new Building[5];
         buildings[0] = new Building(200,85,310,204,"ImageAssets/greenhouse",10,10,80,100,10);
         buildings[1] = new Building(-10,10,300,250,"ImageAssets/tree",10,30,160,230,10);
         //all enemies
         baddies = new Enemy[0];
-
+        mapBoarder = null;
         assets = new String[10];
         assets[0] = "ImageAssets/newGrass";
         assets[1] = "ImageAssets/newGrassUpperWall";
@@ -115,17 +115,94 @@ public class mapPresets {
     }
 
     public void level1(){
-        items = new Item[10];
-        items[5] = new Item(70,200,50,50,"Sign Post","Interact to move to next area.",new int[]{},"ImageAssets/signPost",5,5,20,5,"teleport: base");
-        items[1] = new Item(690,200,50,50,"Red Mushroom","Demo this item is for testing",new int[]{ 5,0,0,2,0,5 },"ImageAssets/mushroom",5,5,35,10,1);
-        items[2] = new Item(400,400,50,50,"Red Mushroom","Demo this item is for testing",new int[]{ 5,0,0,2,0,5 },"ImageAssets/mushroom",5,5,35,10,1);
-        buildings = new Building[5];
-        baddies = new Enemy[5];
-        baddies[0] = new Enemy(600,200,59,66,3,5,0,10,10,5,null,3,"ImageAssets/reaperEnemy");
         minX = 0;
-        minY =65;
+        minY =0;
         maxX = 960;
-        maxY = 540;
+        maxY = 500;
+        mapBoarder = new Animation("ImageAssets/level1mapBoarder",10,960,540);
+
+        Main.engine.player.moveLocation(50,250);
+        //empty lists and randomly fill from library
+        // --> Item list
+        int max = 10;
+        int min = 1;
+        int numberOfItems = (int)Math.floor(Math.random() * (max - min + 1) + min);
+        items = new Item[numberOfItems];
+        // -->Building list
+        max = 10;
+        numberOfItems = (int)Math.floor(Math.random() * (max - min + 1) + min);
+        buildings = new Building[numberOfItems];
+        // --> enemy list
+        max = 6;
+        numberOfItems = (int)Math.floor(Math.random() * (max - min + 1) + min);
+        baddies = new Enemy[numberOfItems];
+
+        // mandatory items
+        items[0] = new Item(70,200,50,50,"Sign Post","Interact to move to next area.",new int[]{},"ImageAssets/signPost",5,5,20,5,"teleport: base");
+        baddies[0] = new Enemy("Reaper",600,200,59,66,3,5,0,10,10,5,null,3,"ImageAssets/reaperEnemy");
+
+        //generate building list
+        for(int i = 0; i < buildings.length; i ++){
+            if(buildings[i] == null) {
+                //"getBuildings" will randomly produce a building from a subset of buildings for maps
+                Building copy = Main.engine.library.getSpawnableBuilding();
+                float randomX = (float) Math.floor(Math.random() * (Main.originalW - 0 + 1) + 0);
+                float randomY = (float) Math.floor(Math.random() * (Main.originalH - 0 + 1) + 0);
+                copy.changeCoordinates(randomX, randomY);
+                int changeThreshold = 0;
+                //if the building were to collide with another item or building change x and y coordinates
+                while (collides(copy) == true && changeThreshold < 200) {
+                    changeThreshold ++;
+                    randomX = (float) Math.floor(Math.random() * (Main.originalW - 0 + 1) + 0);
+                    randomY = (float) Math.floor(Math.random() * (Main.originalH - 0 + 1) + 0);
+                    copy.changeCoordinates(randomX, randomY);
+                }
+                buildings[i] = new Building(copy);
+            }
+        }
+
+        //generate items list
+        for(int i = 0; i < items.length; i ++){
+            if(items[i] == null) {
+                //"getSpawnable" will randomly produce an item from a subset of items for maps
+                Item copy = Main.engine.library.getSpawnableItem();
+                //randomize location
+                float randomX = (float) Math.floor(Math.random() * (Main.originalW - 0 + 1) + 0);
+                float randomY = (float) Math.floor(Math.random() * (Main.originalH - 0 + 1) + 0);
+                copy.changeCoordinates(randomX, randomY);
+                //this variable will stop the changing x and y if tried to many times
+                int changeThreshold = 0;
+                //if the item were to collide with another item or building change x and y coordinates
+                while (collides(copy) == true && changeThreshold < 20) {
+                    randomX = (float) Math.floor(Math.random() * (Main.originalW - 0 + 1) + 0);
+                    randomY = (float) Math.floor(Math.random() * (Main.originalH - 0 + 1) + 0);
+                    copy.changeCoordinates(randomX, randomY);
+                }
+                items[i] = new Item(copy);
+            }
+        }
+
+        //generate baddies
+        for(int i = 0; i < baddies.length; i ++){
+            if(baddies[i] == null) {
+                //"getSpawnable" will randomly produce an enemy from a subset of baddies for maps
+                Enemy copy = Main.engine.library.getSpawnableEnemy();
+                //randomize location
+                float randomX = (float) Math.floor(Math.random() * (Main.originalW - 0 + 1) + 0);
+                float randomY = (float) Math.floor(Math.random() * (Main.originalH - 0 + 1) + 0);
+                copy.changeCoordinates(randomX, randomY);
+                //this variable will stop the changing x and y if tried to many times
+                int changeThreshold = 0;
+                //if the item were to collide with another item or building change x and y coordinates
+                while (collides(copy) == true && changeThreshold < 20) {
+                    randomX = (float) Math.floor(Math.random() * (Main.originalW - 0 + 1) + 0);
+                    randomY = (float) Math.floor(Math.random() * (Main.originalH - 0 + 1) + 0);
+                    copy.changeCoordinates(randomX, randomY);
+                }
+                baddies[i] = new Enemy(copy);
+            }
+        }
+
         assets[0] = "ImageAssets/grasslvl";
         assets[1] = "ImageAssets/grasslvl";
         assets[2] = "ImageAssets/grasslvl";
@@ -135,6 +212,95 @@ public class mapPresets {
         assets[6] = "ImageAssets/grasslvl";
         assets[7] = "ImageAssets/grasslvl";
         assets[8] = "ImageAssets/grasslvl";
+    }
+
+    // method to check if an item/building colides with and item,building or player in list
+    public boolean collides(Graphic x){
+        //check buildings
+        for(Building b: buildings){
+            if(b != null){
+                //check which graphic is bigger and then check if smaller item is inside bigger graphic
+                if(b.w * b.h > x.w * x.h){
+                    for (Point p : x.contactPoints) {
+                        if (p.x >= b.x && p.x <= b.x + b.w && p.y >= b.y && p.y <= b.y + b.h) {
+                            return true;
+                        }
+                    }
+                }
+                else {
+                    for (Point p : b.contactPoints) {
+                        if (p.x >= x.x && p.x <= x.x + x.w && p.y >= x.y && p.y <= x.y + x.h) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        //check items
+        for(Item item: items){
+            if(item != null) {
+                //check which graphic is bigger and then check if smaller item is inside bigger graphic
+                if(item.w * item.h > x.w * x.h){
+                    for (Point p : x.contactPoints) {
+                        if (p.x >= item.x && p.x <= item.x + item.w && p.y >= item.y && p.y <= item.y + item.h) {
+                            return true;
+                        }
+                    }
+                }
+                else {
+                    for (Point p : item.contactPoints) {
+                        if (p.x >= x.x && p.x <= x.x + x.w && p.y >= x.y && p.y <= x.y + x.h) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        //check enemies in map
+        for(Enemy item: baddies){
+            if(item != null) {
+                //check which graphic is bigger and then check if smaller item is inside bigger graphic
+                if(item.w * item.h > x.w * x.h){
+                    for (Point p : x.contactPoints) {
+                        if (p.x >= item.x && p.x <= item.x + item.w && p.y >= item.y && p.y <= item.y + item.h) {
+                            return true;
+                        }
+                    }
+                }
+                else {
+                    for (Point p : item.contactPoints) {
+                        if (p.x >= x.x && p.x <= x.x + x.w && p.y >= x.y && p.y <= x.y + x.h) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+//check collision of player
+        if(Main.engine.player.w * Main.engine.player.h > x.w * x.h){
+            for (Point p : x.contactPoints) {
+                if (p.x >= GEngine.player.x && p.x <= GEngine.player.x + GEngine.player.w && p.y >= GEngine.player.y && p.y <= GEngine.player.y + GEngine.player.h) {
+                    return true;
+                }
+            }
+        }
+        else {
+            //check if collides with player
+            for (Point p : Main.engine.player.contactPoints) {
+                if (p.x >= x.x && p.x <= x.x + x.w && p.y >= x.y && p.y <= x.y + x.h) {
+                    return true;
+                }
+            }
+        }
+
+        //check if in boundaries of map
+        for(Point p : x.contactPoints){
+            if(p.x <= minX || p.x >= maxX || p.y <= minY || p.y >= maxY){
+                return true;
+            }
+        }
+        // no collision occured
+        return false;
     }
 
 

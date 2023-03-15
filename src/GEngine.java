@@ -1,14 +1,15 @@
 public class GEngine {
+    Library library;
 
-    MapSystem currentMap,base,level1;
+    static MapSystem currentMap,base;
     mapPresets mappresets,mp2;
     Renderer renderer;
     static Player player;
     static UI ui;
 
     public GEngine(){
+        library = new Library();
         mappresets = new mapPresets();
-        //base = new MapSystem(mappresets);
         currentMap = new MapSystem(mappresets);
         player = new Player();
         ui = new UI();
@@ -30,15 +31,13 @@ public class GEngine {
 
         if( x == 0){
             currentMap = base;
-            //player x,y start location
-            player.moveLocation(870,220);
+            player.moveLocation(870,250);
         }
         else {
             base = currentMap;
             mp2 = new mapPresets();
             mp2.changeCurrent(x);
             currentMap = new MapSystem(mp2);
-            player.moveLocation(870,220);
         }
 
     }

@@ -12,6 +12,8 @@ public class MapSystem {
     Enemy[] baddies;
     Projectile[] bullets;
     int bulletCount;
+    //store the boarder of a map for UI
+    Animation mapBoarder;
     public MapSystem(mapPresets preset){
 
         //x , y are tiles counts for map
@@ -38,6 +40,7 @@ public class MapSystem {
         baddies = preset.baddies;
         bullets = new Projectile[20];
         bulletCount = 0;
+        mapBoarder = preset.mapBoarder;
         Random random = new Random();
         for(int j = 0; j < y; j ++){
             for(int i = 0; i < x; i ++){
@@ -86,7 +89,7 @@ public class MapSystem {
             //check if player runs into each building
             for (Building b : buildings) {
                 if(b != null){
-                    if(p.x >b.minX  && p.y > b.minY && p.x  < b.maxX && p.y  < b.maxY){
+                    if(p.x >b.x +b.boundaryLX  && p.y > b.y + b.boundaryUY && p.x  < b.x+b.w - b.boundaryRX && p.y  < b.y + b.h -b.boundaryDY){
                         return false;
                     }
                 }

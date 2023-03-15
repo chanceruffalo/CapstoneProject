@@ -50,6 +50,10 @@ public class Renderer {
             pointer.graphic.display();
             pointer = pointer.next;
         }
+        //display map boarder if one is avaiable
+        if(Main.engine.currentMap.mapBoarder != null) {
+            Main.processing.image(Main.engine.currentMap.mapBoarder.display(), 0, 0);
+        }
     }
 
     public RenderNode sortedMerge(RenderNode a, RenderNode b)

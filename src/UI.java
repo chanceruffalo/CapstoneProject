@@ -10,8 +10,8 @@ public class UI {
     public UI(){
         x = 5;
         y = 400;
-        healthBarLength = 100;
-        experienceBarLength = 100;
+        healthBarLength = 117;
+        experienceBarLength = 117;
         inventoryBarWidth = 150;
         inventoryBarHeight = 40;
         abilityHighlight = -1;
@@ -20,7 +20,10 @@ public class UI {
     }
 
     public void display(){
+        //method call for player inventory
         displayPlayerInventory();
+        //display map boarder if one available
+
         }
 
 
@@ -74,5 +77,7 @@ public class UI {
         //display bullet counts
 
         Main.processing.text(Main.engine.currentMap.bulletCount,x+422,y+44);
+
+
     }
 }

@@ -1,10 +1,11 @@
 import processing.core.PImage;
 
 public class Item extends Graphic  {
-    float x,y,w,h,minX,maxX,minY,maxY,boundaryRX,boundaryDY,boundaryLX,boundaryUY;
+    float minX,maxX,minY,maxY,boundaryRX,boundaryDY,boundaryLX,boundaryUY;
     String description,name,address,power;
     Animation animation,activate;
     Boolean interactable,isWeapon;
+    //Point[] contactPoints;
     // statchanges
     //  [0] , [1] , [2] , [3] , [4] , [5]
     //   hp , att , def , spd , maxH, experience
@@ -33,6 +34,7 @@ public class Item extends Graphic  {
         this.statChanges = statchanges;
         this.interactable = false;
         this.address = address;
+        contactPoints = new Point[]{new Point(x,y),new Point(x+w,y),new Point(x,y+h),new Point(x+w,y+h) };
         power = "use";
         animation = new Animation(address,10,(int)w,(int)h);
         activate = new Animation("ImageAssets/activateBtn",10,15,15);
@@ -48,6 +50,7 @@ public class Item extends Graphic  {
         this.boundaryRX = boundaryRX;
         this.boundaryLX = boundaryLX;
         this.boundaryUY = boundaryUY;
+        contactPoints = new Point[]{new Point(x,y),new Point(x+w,y),new Point(x,y+h),new Point(x+w,y+h) };
         maxX = x+w-boundaryRX;
         maxY = y+h-boundaryDY;
         value = maxY;
@@ -75,6 +78,7 @@ public class Item extends Graphic  {
         this.boundaryRX = boundaryRX;
         this.boundaryLX = boundaryLX;
         this.boundaryUY = boundaryUY;
+        contactPoints = new Point[]{new Point(x,y),new Point(x+w,y),new Point(x,y+h),new Point(x+w,y+h) };
         maxX = x+w-boundaryRX;
         maxY = y+h-boundaryDY;
         value = maxY;
@@ -101,6 +105,7 @@ public class Item extends Graphic  {
         this.boundaryRX = i.boundaryRX;
         this.boundaryLX = i.boundaryLX;
         this.boundaryUY = i.boundaryUY;
+        this.contactPoints = i.contactPoints;
         maxX = x+w-boundaryRX;
         maxY = y+h-boundaryDY;
         value = maxY;
@@ -143,6 +148,13 @@ public class Item extends Graphic  {
             Main.engine.player.experience += statChanges[5];
             uses--;
         }
+    }
+
+    //method to change x y coordinates including contactpoints
+    public void changeCoordinates(float x, float y){
+        this.x = x;
+        this.y = y;
+        this.contactPoints = new Point[]{new Point(x,y),new Point(x+w,y),new Point(x,y+h),new Point(x+w,y+h) };
     }
 
 
