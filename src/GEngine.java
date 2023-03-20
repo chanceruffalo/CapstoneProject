@@ -1,4 +1,5 @@
 public class GEngine {
+    boolean startGame;
     Library library;
 
     static MapSystem currentMap,base;
@@ -6,9 +7,12 @@ public class GEngine {
     Renderer renderer;
     static Player player;
     static UI ui;
+    Animation menuScreen;
 
     public GEngine(){
-        library = new Library();
+        startGame = false;
+        this.library = Main.library;
+        menuScreen = library.menuScreen;
         mappresets = new mapPresets();
         currentMap = new MapSystem(mappresets);
         player = new Player();
@@ -17,9 +21,14 @@ public class GEngine {
     }
 
     public void start(){
-        currentMap.displayBackground();
-        renderer.display();
-        ui.display();
+        if(startGame) {
+            currentMap.displayBackground();
+            renderer.display();
+            ui.display();
+        }
+        else{
+            Main.processing.image(menuScreen.display(),0,0);
+        }
     }
 
     public void resize(double displayWk,double displayHk){

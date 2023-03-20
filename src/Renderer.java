@@ -46,9 +46,43 @@ public class Renderer {
         push(Main.engine.player);
         first = mergeSort(first);
         RenderNode pointer = first;
+        Graphic player = null;
         while(pointer != null){
-            pointer.graphic.display();
-            pointer = pointer.next;
+            //finds player in stack as it traverses
+            if(pointer.graphic == Main.engine.player){
+                player = pointer.graphic;
+                pointer.graphic.display();
+                pointer = pointer.next;
+            }
+            //displays graphics without tints
+            else if(player == null) {
+                pointer.graphic.display();
+                pointer = pointer.next;
+            }
+            //checks if a tint needs to be applied
+            else{
+                Graphic temp = pointer.graphic;
+                if(player != null) {
+                    boolean behindCharacter = false;
+                    //checks for all points of character and applies tint if the player is behind it
+                    for (Point p : Main.engine.player.contactPoints) {
+                        if (p.x > temp.x && p.x < temp.x + temp.w && p.y > temp.y && p.y < temp.y + temp.h) {
+                            Main.processing.tint(255, 126);
+                            pointer.graphic.display();
+                            pointer = pointer.next;
+                            Main.processing.noTint();
+                            behindCharacter = true;
+                            break;
+                        }
+                    }
+                    // wont apply tint since player is'nt directly behind it
+                    if(!behindCharacter) {
+                        pointer.graphic.display();
+                        pointer = pointer.next;
+                    }
+                }
+            }
+
         }
         //display map boarder if one is avaiable
         if(Main.engine.currentMap.mapBoarder != null) {

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Player extends Graphic{
-     float x,y,w,h,dx,dy,speed,attack,defense,health,maxHealth,experience,maxExperience,grabRange,footY;
+     float x,y,w,h,playerScale,dx,dy,speed,attack,defense,health,maxHealth,experience,maxExperience,grabRange,footY;
      int i,j,level,emptySpot;
      boolean up,down,left,right,interact;
      Point[] contactPoints,viewPoints;
@@ -35,8 +35,10 @@ public class Player extends Graphic{
          value = y +h;
          i = 0;
          j = 0;
-         w = 49;
-         h = 84;
+         playerScale = (float)0.70;
+         // original w,h ( 49, 84) decreased by 30%
+         w = (float)49*playerScale;
+         h = (float)84 *playerScale;
          inventory = new Item[20];
          emptySpot = 0;
          weapon = null;

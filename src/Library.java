@@ -4,17 +4,19 @@ public class Library {
     Item[] items, spawnableItems;
     Building[] buildings, spawnableBuildings;
     Enemy[] baddies, spawnableEnemy;
+    Animation menuScreen;
     //this list will hold items that can spawn randomly in a map
     int spawnableMax, spawnableMin;
     Random random;
 
     public Library() {
+        menuScreen = new Animation("ImageAssets/menuScreen",5,960,540);
         // statchanges
         //  [0] , [1] , [2] , [3] , [4] , [5] , [6] , [7]
         //   hp , att , def , spd , maxH, exp , proW, Projectile H
         items = new Item[10];
         items[0] = new Item(-100, -100, 50, 50, "Red Mushroom", "Magical healing mushroom.\nCan be produced.", new int[]{5, 0, 0, 0, 0, 0}, "ImageAssets/mushroom", 5, 5, 35, 10, 1);
-        items[1] = new Item(-100, -100, 25, 15, "Blue waterCan", "Tool for watering plants.", new int[]{0, 1, 0, 2, 0, 0, 10, 10}, "ImageAssets/watercan", 5, 5, 35, 10, true, "shoot");
+        items[1] = new Item(-100, -100, 25, 15, "Blue watercan", "Tool for watering plants.", new int[]{0, 5, 0, 2, 0, 0, 10, 10}, "ImageAssets/watercan", 0, 0, 0, 0, true, "shoot");
         items[2] = new Item(-100, -100, 50, 50, "Sign Post", "Interact to move to next area.", new int[]{}, "ImageAssets/signPost", 5, 5, 20, 5, "teleport: level1");
         //subset list for items to spawn in maps
         spawnableItems = new Item[10];
@@ -41,8 +43,7 @@ public class Library {
         for (Item i : items) {
             if (i.name.equals(name)) {
                 Item copy = new Item(i);
-                copy.x = x;
-                copy.y = y;
+                copy.changeCoordinates(x,y);
                 return copy;
             }
         }
@@ -52,14 +53,13 @@ public class Library {
     public Item getItem(int index, float x, float y) {
         if (items[index] != null) {
             Item copy = new Item(items[index]);
-            copy.x = x;
-            copy.y = y;
+            copy.changeCoordinates(x,y);
             return copy;
         }
         return null;
     }
 
-    // generate a random builing that can be spawned in map --> might need to be revisted for map themes
+    // generate a random building that can be spawned in map --> might need to be revisted for map themes
     public Building getSpawnableBuilding() {
         int rand = (int) Math.floor(Math.random() * (spawnableBuildings.length));
         while (spawnableBuildings[rand] == null) {

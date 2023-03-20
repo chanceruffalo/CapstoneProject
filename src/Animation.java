@@ -16,25 +16,27 @@ public class Animation {
         this.h =h;
         this.frameRate = frameRate;
         imgs = new PImage[30];
-        //populate images into array
-        PImage temp = Main.processing.loadImage((address+maxFrames+".png"));
-        temp.resize(w,h);
-        imgs[maxFrames-1] = temp;
-        boolean finding = true;
-        while(finding){
-            try {
-                maxFrames ++;
-                temp = Main.processing.loadImage((address + maxFrames + ".png"));
-                temp.resize(w,h);
-                imgs[maxFrames-1] = temp;
-            }catch(Exception E){
-                maxFrames --;
-                finding = false;
+
+            //populate images into array
+            PImage temp = Main.processing.loadImage((address + maxFrames + ".png"));
+            temp.resize(w, h);
+            imgs[maxFrames - 1] = temp;
+            boolean finding = true;
+            while (finding) {
+                try {
+                    maxFrames++;
+                    temp = Main.processing.loadImage((address + maxFrames + ".png"));
+                    temp.resize(w, h);
+                    imgs[maxFrames - 1] = temp;
+                } catch (Exception E) {
+                    maxFrames--;
+                    finding = false;
+                }
             }
-        }
-
-
     }
+
+
+
     public PImage display(){
         counter ++;
         if(counter > frameRate){

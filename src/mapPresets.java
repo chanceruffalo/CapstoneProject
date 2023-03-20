@@ -26,11 +26,11 @@ public class mapPresets {
         //  [0] , [1] , [2] , [3] , [4] , [5] , [6] , [7]
         //   hp , att , def , spd , maxH, exp , proW, Projectile Height
         items = new Item[10];
-        items[0] = new Item(500,375,25,15,"Blue waterCan","Demo this item is for testing",new int[]{ 10,0,0,2,0,0,20,20 },"ImageAssets/watercan",5,5,35,10,true,"shoot");
+        items[0] = Main.library.getItem("Blue watercan",500,375);
         items[1] = new Item(870,200,50,50,"Sign Post","Interact to move to next area.",new int[]{},"ImageAssets/signPost",5,5,20,5,"teleport: level1");
         //all buildings
         buildings = new Building[5];
-        buildings[0 ] = new Building(200,85,310,204,"ImageAssets/greenhouse",10,10,80,100,10);
+        buildings[0] = new Building(200,85,310,204,"ImageAssets/greenhouse",10,10,80,100,10);
         buildings[1] = new Building(-10,10,300,250,"ImageAssets/tree",10,30,160,230,10);
         //all enemies
         baddies = new Enemy[5];
@@ -118,10 +118,25 @@ public class mapPresets {
         minX = 0;
         minY =0;
         maxX = 960;
+        //maxy less than window height to account for Inventory UI
         maxY = 500;
         mapBoarder = new Animation("ImageAssets/level1mapBoarder",10,960,540);
 
         Main.engine.player.moveLocation(50,250);
+        // maptile population
+        for(int i = 0; i < 12; i ++){
+            for(int j = 0; j < 21; j ++){
+                    int taddress = random.nextInt(10)+1;
+                    while(taddress == 1 ||taddress == 5){
+                        taddress = random.nextInt(4)+1;
+                    }
+                    if(taddress > 4){
+                        taddress = 6;
+                    }
+                    home[i][j] = taddress;
+                }
+            }
+
         //empty lists and randomly fill from library
         // --> Item list
         int max = 10;
@@ -205,11 +220,11 @@ public class mapPresets {
 
         assets[0] = "ImageAssets/grasslvl";
         assets[1] = "ImageAssets/grasslvl";
-        assets[2] = "ImageAssets/grasslvl";
-        assets[3] = "ImageAssets/grasslvl";
-        assets[4] = "ImageAssets/grasslvl";
+        assets[2] = "ImageAssets/grasslvl1_2";
+        assets[3] = "ImageAssets/grasslvl1_2";
+        assets[4] = "ImageAssets/grasslvl1_3";
         assets[5] = "ImageAssets/grasslvl";
-        assets[6] = "ImageAssets/grasslvl";
+        assets[6] = "ImageAssets/grasslvl1_3";
         assets[7] = "ImageAssets/grasslvl";
         assets[8] = "ImageAssets/grasslvl";
     }

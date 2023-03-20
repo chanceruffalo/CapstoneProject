@@ -6,6 +6,7 @@ import java.util.ArrayList;
 public class Main extends PApplet{
     public static PApplet processing;
     public static GEngine engine;
+    public static Library library;
     public static boolean loads;
     public static Double time;
     public static double originalW,originalH;
@@ -27,6 +28,7 @@ public class Main extends PApplet{
     }
     public void loadAssets(){
         processing = this;
+        library = new Library();
         engine = new GEngine();
         loads = true;
     }
@@ -44,6 +46,7 @@ public class Main extends PApplet{
     public void draw(){
         time += .01;
         background(0,0,0);
+
         if(loads) {
             //if (processing.width - originalW > 10 || processing.height - originalH>10) {
               //  resize();
@@ -84,7 +87,12 @@ public class Main extends PApplet{
             case '8' : engine.player.useAbility(7);break;
             case '9' : engine.player.useAbility(8);break;
             case '0' : engine.player.useAbility(9);break;
-            case ' ' : engine.player.useWeapon(mouseX, mouseY);
+            case ' ' : if(Main.engine.startGame){
+                Main.engine.player.useWeapon(mouseX, mouseY);
+            }
+            else{
+                Main.engine.startGame = true;
+            }
         }
     }
 

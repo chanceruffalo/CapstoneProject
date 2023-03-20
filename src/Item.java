@@ -140,13 +140,23 @@ public class Item extends Graphic  {
             // statchanges
             //  [0] , [1] , [2] , [3] , [4] , [5] , [6] , [7]
             //   hp , att , def , spd , maxH, exp , proW, Projectile Height
-            Main.engine.player.health += statChanges[0];
-            Main.engine.player.attack += statChanges[1];
-            Main.engine.player.defense += statChanges[2];
-            Main.engine.player.speed += statChanges[3];
-            Main.engine.player.maxHealth += statChanges[4];
-            Main.engine.player.experience += statChanges[5];
-            uses--;
+            if(statChanges[0] != 0 &&Main.engine.player.health < Main.engine.player.maxHealth){
+                Main.engine.player.health += statChanges[0];
+                Main.engine.player.attack += statChanges[1];
+                Main.engine.player.defense += statChanges[2];
+                Main.engine.player.speed += statChanges[3];
+                Main.engine.player.maxHealth += statChanges[4];
+                Main.engine.player.experience += statChanges[5];
+                uses --;
+            }
+            else if(statChanges[0] == 0) {
+                Main.engine.player.attack += statChanges[1];
+                Main.engine.player.defense += statChanges[2];
+                Main.engine.player.speed += statChanges[3];
+                Main.engine.player.maxHealth += statChanges[4];
+                Main.engine.player.experience += statChanges[5];
+                uses--;
+            }
         }
     }
 
@@ -154,6 +164,11 @@ public class Item extends Graphic  {
     public void changeCoordinates(float x, float y){
         this.x = x;
         this.y = y;
+        maxX = x+w-boundaryRX;
+        maxY = y+h-boundaryDY;
+        value = maxY;
+        minX = x+boundaryLX;
+        minY = y+boundaryUY;
         this.contactPoints = new Point[]{new Point(x,y),new Point(x+w,y),new Point(x,y+h),new Point(x+w,y+h) };
     }
 

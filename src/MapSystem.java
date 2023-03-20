@@ -66,9 +66,24 @@ public class MapSystem {
     }
 
     public void deleteProjectile(int index){
-        int i = 0;
         bullets[index] = null;
         bulletCount --;
+    }
+
+    public void deleteEnemy(float x, float y){
+        int index = 0;
+        for(Enemy e: baddies){
+            if(e != null){
+                if(e.x ==x && e.y ==y){
+                    baddies[index] = null;
+                    break;
+                }
+                index ++;
+            }
+            else{
+                index ++;
+            }
+        }
     }
 
     public void displayBackground() {
@@ -110,7 +125,9 @@ public class MapSystem {
         return true;
     }
 
+    //here will check bullet collision and perform operations if bullet does something if hit
     public boolean checkBulletCollision(Projectile p){
+        //if goes off-screen or hits a building return null
         for (Building b : buildings) {
             if(b != null){
                 if(p.x >b.minX  && p.y > b.minY && p.x  < b.maxX && p.y  < b.maxY){
@@ -118,6 +135,22 @@ public class MapSystem {
                 }
             }
         }
+        //checks collision with enemy
+        for(Enemy e:baddies){
+            if(e != null){
+                if(p.x >e.x  && p.y > e.y && p.x  < e.x + e.w && p.y  < e.y+e.h){
+                        e.takeDamage(p.attack);
+                        //e.health -= (p.attack - e.defense);
+                    return true;
+                }
+            }
+        }
+        //check if bullet collides with player
+        if(p.x >Main.engine.player.x  && p.y > Main.engine.player.y && p.x  < Main.engine.player.x + Main.engine.player.w && p.y  < Main.engine.player.y+Main.engine.player.h && !p.isFriendly){
+           // Main.engine.player.takeDamage(p.attack);
+            return true;
+        }
+
         return false;
     }
 //checks if a player can interact with an item and perform interaction if permitted

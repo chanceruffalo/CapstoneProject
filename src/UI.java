@@ -40,6 +40,12 @@ public class UI {
         Main.processing.fill(0,0,250);
         Main.processing.rect(x+450,y+70, experienceBarLength*(Main.engine.player.experience/Main.engine.player.maxExperience),18);
 
+        //item highlight
+        if(abilityHighlight != -1) {
+            Main.processing.noFill();
+            Main.processing.rect(300 + 27 * abilityHighlight, 494, 25, 25);
+        }
+
         //Display items
         Main.processing.image(inventoryUI.display(),290,470);
         for(Item item: Main.engine.player.inventory){
@@ -60,24 +66,15 @@ public class UI {
                 slot++;
             }
         }
+        //display player level
         Main.processing.fill(250,250,250);
-        //item highlight
-        if(abilityHighlight != -1) {
-            Main.processing.noFill();
-            Main.processing.rect(300 + 27 * abilityHighlight, 494, 25, 25);
-        }
         Main.processing.textSize(15);
-
         if(Main.engine.player.level > 9){
             Main.processing.text( Main.engine.player.level ,x+ 422,y+84);
         }
         else{
             Main.processing.text( Main.engine.player.level ,x+ 426,y+84);
         }
-        //display bullet counts
-
-        Main.processing.text(Main.engine.currentMap.bulletCount,x+422,y+44);
-
 
     }
 }

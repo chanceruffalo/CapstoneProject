@@ -15,18 +15,18 @@ public class Weapon extends Graphic {
     public Weapon(Item i){
         this.x = i.x;
         this.y = i.y;
-        this.w = i.w;
-        this.h = i.h;
+        this.w = i.w*Main.engine.player.playerScale;
+        this.h = i.h*Main.engine.player.playerScale;
         this.name = i.name;
         this.description = i.description;
-        this.statChanges = i.statChanges;
         this.address = i.address;
-        statChanges = i.statChanges;
+        this.statChanges = i.statChanges;
         this.rightIdle = new Animation(address,10,(int)w,(int)h);
         this.leftIdle = new Animation(address+"leftIdle",10,(int)w,(int)h);
         animation = rightIdle;
+        System.out.println("proj. attack: "+ statChanges[1]);
 
-        projectile = new Projectile(x,y,(float)statChanges[6],(float)statChanges[7],(float)statChanges[1],(float)statChanges[3],address+"Projectile",true);
+        projectile = new Projectile(x,y,(float)statChanges[6],(float)statChanges[7],statChanges[1],statChanges[3],address+"Projectile",true);
     }
 
     public Weapon(float x,float y,float w,float h, String name,String description, int[] statchanges, String address){

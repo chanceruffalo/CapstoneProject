@@ -1,11 +1,11 @@
 public class Enemy extends Graphic{
     float x,y,w,h,dx,dy,speed,attack,defense,health,maxHealth,experience,footY;
-    int i,j,level,movementCounter;
+    int i,j,level,movementCounter,recentDamageTimer;
     boolean up,down,left,right,playerSpotted;
-    String name,address;
-    Point[] viewPoints;
+    String name,address,recentDamage;
+    //this array will show damage done as floating numbers above enemy
     Weapon weapon;
-    Animation current, rightIdle,leftIdle;
+    Animation current, rightIdle,leftIdle,alert;
     public Enemy(String name,float x, float y,float w, float h,float speed, float attack, float defense, float health, float maxHealth, float experience, Weapon weapon, int level,String address){
         this.x = x;
         this.y = y;
@@ -45,6 +45,8 @@ public class Enemy extends Graphic{
         rightIdle = new Animation(address,10,(int)w,(int)h);
         leftIdle = new Animation(address+"_left",10,(int)w,(int) h);
         current = leftIdle;
+        recentDamage = "";
+        recentDamageTimer = 0;
     }
     //copy constructor
     public Enemy(Enemy e){
@@ -88,12 +90,50 @@ public class Enemy extends Graphic{
         current = leftIdle;
     }
 
+    public void takeDamage(float damage){
+        if(defense < damage){
+            recentDamage = "-" + (attack - defense);
+            health -= damage- defense;
+        }
+
+        if(health <= 0){
+            Main.engine.currentMap.deleteEnemy(x,y);
+        }
+    }
+
+
     public void display(){
 
         move(look());
         //render value for displaying properly
         value = y + h;
         Main.processing.image(current.display(),x,y);
+        //display health bar
+        float healthBarPaddingX = (float).05*w;
+        float healthBarPaddingY = (float).05*h;
+        if(health != maxHealth) {
+            //health bar background
+            Main.processing.fill(0, 0, 0);
+            Main.processing.rect(x + healthBarPaddingX, y + healthBarPaddingY, w - healthBarPaddingX, 3);
+            //health bar
+            Main.processing.fill(250, 0, 0);
+            float HealthK = health / maxHealth;
+            Main.processing.rect(x + healthBarPaddingX, y + healthBarPaddingY, (w - healthBarPaddingX) * (HealthK), 3);
+
+            //show recent damage
+            if(recentDamage != "" && recentDamageTimer == 0){
+                recentDamageTimer = 50;
+            }
+            if(recentDamageTimer != 0){
+                recentDamageTimer --;
+                Main.processing.fill(0,0,0);
+                Main.processing.text(recentDamage,x+w,y+10+(float)(.5*recentDamageTimer));
+                if(recentDamageTimer == 0){
+                    recentDamage = "";
+                }
+            }
+
+        }
     }
     // update view points based on direction
     public String look(){
