@@ -6,6 +6,8 @@ public class UI {
 
     Animation inventoryUI;
     int abilityHighlight;
+    String[] attributes;
+    static boolean pause;
 
     public UI(){
         x = 5;
@@ -16,13 +18,31 @@ public class UI {
         inventoryBarHeight = 40;
         abilityHighlight = -1;
         inventoryUI = new Animation("ImageAssets/inventoryUI",10,290,70);
+        attributes = new String[]{"Health","Attack","Defense","Speed"};
+        pause = false;
         //font = Main.processing.createFont("TheConfessionRegular-YBpv.ttf",128);
     }
 
     public void display(){
-        //method call for player inventory
-        displayPlayerInventory();
-        //display map boarder if one available
+        if(pause){
+            displayMenuScreen();
+        }
+        else {
+            //method call for player inventory
+            displayPlayerInventory();
+            //display item menus
+            displayItemDescriptions();
+        }
+
+        }
+
+        public void displayMenuScreen(){
+            float menuX = 200;
+            float menuY = 100;
+            float menuW = 560;
+            float menuH = 340;
+            Main.processing.fill(0,0,0);
+            Main.processing.rect(menuX,menuY,menuW,menuH);
 
         }
 
@@ -76,5 +96,143 @@ public class UI {
             Main.processing.text( Main.engine.player.level ,x+ 426,y+84);
         }
 
+
     }
+
+    public void displayItemDescriptions(){
+        float mX = Main.processing.mouseX;
+        float mY = Main.processing.mouseY;
+        for(Item i: Main.engine.currentMap.items){
+            if(i != null && mX > i.x && mX < i.x + i.w && mY > i.y && mY < i.y + i.h) {
+                //regular items
+                if(!i.isWeapon){
+                    //box for descriptions
+                    String name = i.name;
+                    float widthOfTitle = Main.processing.textWidth(name)+6;
+                    float widthOfHighlightBoarder = 2;
+                    float cursor_offsetX = 10;
+                    float cursor_offsetY = 3;
+                    float innerBox_offsetX = mX + cursor_offsetX + widthOfHighlightBoarder;
+                    float innerBox_offsetY = mY + cursor_offsetY + widthOfHighlightBoarder;
+                        //checks if the menu would go off screen
+                    if(widthOfTitle+mX > Main.originalW){
+                        cursor_offsetX = -106;
+                        cursor_offsetY = +3;
+                        innerBox_offsetX = mX + cursor_offsetX + widthOfHighlightBoarder;
+                        innerBox_offsetY = mY + cursor_offsetY + widthOfHighlightBoarder;
+                        float middle_textX = innerBox_offsetX+50;
+                        float transparencyLevel = 180;
+
+                        //color highlight box
+                        Main.processing.fill(28,28,28, transparencyLevel);
+                        Main.processing.rect( mX +cursor_offsetX, mY+cursor_offsetY,100+ widthOfHighlightBoarder*2, 100);
+                        //inside box
+                        Main.processing.fill(129,129,129, 100);
+                        Main.processing.rect(innerBox_offsetX, innerBox_offsetY,100, 96);
+                        float textHeight = 14;
+                        Main.processing.textSize(textHeight);
+                        Main.processing.fill(0, 0, 0);
+                        //DISPLAY TITLE
+                        Main.processing.text(name,  middle_textX - Main.processing.textWidth(i.name)/2, innerBox_offsetY + textHeight);
+                        Main.processing.noStroke();
+                        Main.processing.rect(innerBox_offsetX + middle_textX, innerBox_offsetY + textHeight, (Main.processing.textWidth(name)), 1);
+                        Main.processing.textSize(12);
+                        Main.processing.text(i.description, innerBox_offsetX, innerBox_offsetY + 14 * 2, 1);
+                        Main.processing.noStroke();
+                        Main.processing.rect(middle_textX - Main.processing.textWidth(i.name)/2, innerBox_offsetY + textHeight,Main.processing.textWidth(i.name),1);
+
+
+                    }
+                    else {
+                        cursor_offsetX = 8;
+                        cursor_offsetY = +3;
+                        innerBox_offsetX = mX + cursor_offsetX + widthOfHighlightBoarder;
+                        innerBox_offsetY = mY + cursor_offsetY + widthOfHighlightBoarder;
+                        float middle_textX = innerBox_offsetX+50;
+                        float transparencyLevel = 180;
+
+                        //color highlight box
+                        Main.processing.fill(28,28,28, transparencyLevel);
+                        Main.processing.rect( mX +cursor_offsetX, mY+cursor_offsetY,100+ widthOfHighlightBoarder*2, 100);
+                        //inside box
+                        Main.processing.fill(169,169,169, 100);
+                        Main.processing.rect(innerBox_offsetX, innerBox_offsetY,100, 96);
+                        float textHeight = 14;
+                        Main.processing.textSize(textHeight);
+                        Main.processing.fill(0, 0, 0);
+                        //DISPLAY TITLE
+                        Main.processing.text(name,  middle_textX - Main.processing.textWidth(i.name)/2, innerBox_offsetY + textHeight);
+                        Main.processing.noStroke();
+                        Main.processing.rect(innerBox_offsetX + middle_textX, innerBox_offsetY + textHeight, (Main.processing.textWidth(name)), 1);
+                        Main.processing.textSize(12);
+                        Main.processing.text(i.description, innerBox_offsetX, innerBox_offsetY + 14 * 2, 1);
+                        Main.processing.noStroke();
+                        Main.processing.rect(middle_textX - Main.processing.textWidth(i.name)/2, innerBox_offsetY + textHeight,Main.processing.textWidth(i.name),1);
+
+                    }
+                }
+                //check if menu will go off screen
+
+                //If item is weapon special menu
+                if (i.isWeapon) {
+                    //box for descriptions
+                    String nameLevel = i.name + "-Power: " + (int)i.powerLevel;
+                    float widthOfTitle = Main.processing.textWidth(nameLevel)+6;
+                    float widthOfHighlightBoarder = 2;
+                    float middle_textX = (widthOfTitle/2) -(Main.processing.textWidth(nameLevel)/2)  + widthOfHighlightBoarder;
+                    float cursor_offsetX = 10;
+                    float cursor_offsetY = 3;
+                    float innerBox_offsetX =mX  + cursor_offsetX+widthOfHighlightBoarder;
+                    float innerBox_offsetY = mY+ cursor_offsetY+widthOfHighlightBoarder;
+                    float transparencyLevel = 180;
+                    //LOW QUALITY WEAPON 0 - 600
+                    if (i.powerLevel < 400.) {
+                        //color highlight box
+                        Main.processing.fill(0,204,0, transparencyLevel);
+                        Main.processing.rect(mX + cursor_offsetX, mY + cursor_offsetY,widthOfTitle+ widthOfHighlightBoarder*2, 100);
+                        //inside box
+                        Main.processing.fill(0,102,0, 100);
+                        Main.processing.rect(innerBox_offsetX, innerBox_offsetY, widthOfTitle- widthOfHighlightBoarder/2, 96);
+
+                    }
+                    // 601-1000
+                    else if (i.powerLevel >= 400 && i.powerLevel < 1000) {
+                        //color highlight box
+                        Main.processing.fill(102, 255, 255,transparencyLevel);
+                        Main.processing.rect(mX + cursor_offsetX, mY + cursor_offsetY, widthOfTitle+ widthOfHighlightBoarder*2, 100);
+                        //inside box
+                        Main.processing.fill(102, 102, 255,transparencyLevel);
+                        Main.processing.rect(innerBox_offsetX, innerBox_offsetY, widthOfTitle- widthOfHighlightBoarder/2, 96);
+                    }
+                    //add more colors here
+
+                    // text for weapons pop-up menu
+                    float textHeight = 14;
+                    Main.processing.textSize(textHeight);
+
+                    Main.processing.fill(0,0,0);
+                    //DISPLAY TITLE
+                    Main.processing.text(nameLevel, innerBox_offsetX+middle_textX, innerBox_offsetY + textHeight);
+                    Main.processing.noStroke();
+                    Main.processing.rect(innerBox_offsetX+middle_textX, innerBox_offsetY + textHeight,(Main.processing.textWidth(nameLevel)),1);
+                    Main.processing.textSize(14);
+                    float widthOfText = Main.processing.textWidth("- Weapon -")+6;
+                    middle_textX = (widthOfTitle+ widthOfHighlightBoarder*2)/2-(widthOfText/2) ;
+                    Main.processing.text("- Weapon -",mX + cursor_offsetX+middle_textX,innerBox_offsetY + textHeight+11);
+                    //DISPLAY WEAPON STATS
+                    for(int j = 0; j < attributes.length; j ++){
+                        String temp = attributes[j] + ": +" + i.statChanges[j];
+                        Main.processing.text(temp,mX + cursor_offsetX+10,innerBox_offsetY + textHeight+14*(j+2));
+
+                    }
+
+
+
+                }
+                //end transparency
+                Main.processing.noTint();
+            }
+        }
+    }
+
 }

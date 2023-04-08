@@ -27,7 +27,8 @@ public class mapPresets {
         //   hp , att , def , spd , maxH, exp , proW, Projectile Height
         items = new Item[10];
         items[0] = Main.library.getItem("Blue watercan",500,375);
-        items[1] = new Item(870,200,50,50,"Sign Post","Interact to move to next area.",new int[]{},"ImageAssets/signPost",5,5,20,5,"teleport: level1");
+        items[1] = Main.library.getItem("Sign Post",670,200);
+        items[2] = Main.library.getItem("Ice Staff", 540,375);
         //all buildings
         buildings = new Building[5];
         buildings[0] = new Building(200,85,310,204,"ImageAssets/greenhouse",10,10,80,100,10);
@@ -139,8 +140,8 @@ public class mapPresets {
 
         //empty lists and randomly fill from library
         // --> Item list
-        int max = 10;
-        int min = 1;
+        int max = 12;
+        int min = 4;
         int numberOfItems = (int)Math.floor(Math.random() * (max - min + 1) + min);
         items = new Item[numberOfItems];
         // -->Building list
@@ -153,9 +154,30 @@ public class mapPresets {
         baddies = new Enemy[numberOfItems];
 
         // mandatory items
-        items[0] = new Item(70,200,50,50,"Sign Post","Interact to move to next area.",new int[]{},"ImageAssets/signPost",5,5,20,5,"teleport: base");
-        baddies[0] = new Enemy("Reaper",600,200,59,66,3,5,0,10,10,5,null,3,"ImageAssets/reaperEnemy");
+        items[0] = Main.engine.library.getItem("Sign Post",70,200);
+        items[0].power = "teleport: base";
 
+        //empty lists and randomly fill from library
+        //make invisble not usable sign post to go to next level once level is complete
+         max = 4;
+         min = 1;
+        int homePost = (int)Math.floor(Math.random() * (max - min + 1) + min);
+        //bottom left sing post
+        if(homePost == 1){
+           items[1] = Main.engine.library.getItem("Sign Post",70,400);
+        }
+        //top sign post
+        if(homePost == 2){
+             items[1] = Main.engine.library.getItem("Sign Post",400,70);
+        }
+        //right sign post
+        if(homePost == 3){
+             items[1] = Main.engine.library.getItem("Sign Post",870,400);
+        }
+        //bottom sign post
+        if(homePost == 4){
+            items[1] = Main.engine.library.getItem("Sign Post",600,400);
+        }
         //generate building list
         for(int i = 0; i < buildings.length; i ++){
             if(buildings[i] == null) {

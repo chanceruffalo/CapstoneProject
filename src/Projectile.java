@@ -49,8 +49,8 @@ public class Projectile extends Graphic{
             Main.processing.rotate(rot);
             Main.processing.image(current.display(), 0, 0);
             Main.processing.popMatrix();
-        x += dx * speed;
-        y += dy * speed;
+        x += dx * speed/100;
+        y += dy * speed/100;
         //check if the bullet should be deleted because of collision
         if (x < -50 || y < -50 || x > Main.originalW+50 || y > Main.originalH+50 || Main.engine.currentMap.checkBulletCollision(this)) {
             Main.engine.currentMap.deleteProjectile(index);

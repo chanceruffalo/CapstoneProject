@@ -15,6 +15,7 @@ public class Main extends PApplet{
     public static void main(String[] args) {
         time = 0.0;
         loads = false;
+
        PApplet.main("Main",args);
     }
     public void settings(){
@@ -37,7 +38,6 @@ public class Main extends PApplet{
         surface.setTitle("Greener Fields");
        // surface.setResizable(true);
         surface.setLocation(100, 100);
-
         thread("loadAssets");
     }
 
@@ -45,13 +45,17 @@ public class Main extends PApplet{
 
     public void draw(){
         time += .01;
-        background(0,0,0);
 
         if(loads) {
             //if (processing.width - originalW > 10 || processing.height - originalH>10) {
               //  resize();
             //}
             engine.start();
+        }
+        else{
+            //display menu screen while loading assets
+            PImage temp = loadImage("ImageAssets/menuScreen1.png");
+            processing.image(temp,0,0);
         }
 
     }
@@ -71,27 +75,73 @@ public class Main extends PApplet{
     }
 
     public void keyPressed(){
-        switch(keyCode){
-            case 'A' : engine.player.left = true;break;
-            case 'W' : engine.player.up = true;break;
-            case 'S' : engine.player.down = true;break;
-            case 'D' : engine.player.right = true;break;
-            case 'F' : engine.player.checkinteractions();break;
-            case '1' : engine.player.useAbility(0);break;
-            case '2' : engine.player.useAbility(1);break;
-            case '3' : engine.player.useAbility(2);break;
-            case '4' : engine.player.useAbility(3);break;
-            case '5' : engine.player.useAbility(4);break;
-            case '6' : engine.player.useAbility(5);break;
-            case '7' : engine.player.useAbility(6);break;
-            case '8' : engine.player.useAbility(7);break;
-            case '9' : engine.player.useAbility(8);break;
-            case '0' : engine.player.useAbility(9);break;
-            case ' ' : if(Main.engine.startGame){
-                Main.engine.player.useWeapon(mouseX, mouseY);
+        switch(keyCode) {
+            case 'A':
+                engine.player.left = true;
+                break;
+            case 'W':
+                engine.player.up = true;
+                break;
+            case 'S':
+                engine.player.down = true;
+                break;
+            case 'D':
+                engine.player.right = true;
+                break;
+            case 'F':
+                engine.player.checkinteractions();
+                break;
+            case '1':
+                engine.player.useAbility(0);
+                break;
+            case '2':
+                engine.player.useAbility(1);
+                break;
+            case '3':
+                engine.player.useAbility(2);
+                break;
+            case '4':
+                engine.player.useAbility(3);
+                break;
+            case '5':
+                engine.player.useAbility(4);
+                break;
+            case '6':
+                engine.player.useAbility(5);
+                break;
+            case '7':
+                engine.player.useAbility(6);
+                break;
+            case '8':
+                engine.player.useAbility(7);
+                break;
+            case '9':
+                engine.player.useAbility(8);
+                break;
+            case '0':
+                engine.player.useAbility(9);
+                break;
+            case 'Q':
+                engine.player.useWeapon(mouseX, mouseY);
+            case ' ': {
+                if (Main.engine.playerDeath) {
+                    Main.engine.changeMap(0);
+                    Main.engine.player.health = (float) (Main.engine.player.maxHealth * .1);
+                    engine.playerDeath = false;
+                    break;
+                }
+                else if (Main.engine.startGame && !engine.ui.pause) {
+                    Main.engine.player.useWeapon(mouseX, mouseY);break;
+                }
+                else {
+                    engine.startGame = true;break;
+
+                }
             }
-            else{
-                Main.engine.startGame = true;
+            case 'P':{
+                if(Main.engine.startGame) {
+                    engine.ui.pause = !engine.ui.pause;break;
+                }
             }
         }
     }

@@ -38,7 +38,7 @@ public class MapSystem {
         buildings = preset.buildings;
         items = preset.items;
         baddies = preset.baddies;
-        bullets = new Projectile[20];
+        bullets = new Projectile[60];
         bulletCount = 0;
         mapBoarder = preset.mapBoarder;
         Random random = new Random();
@@ -138,7 +138,7 @@ public class MapSystem {
         //checks collision with enemy
         for(Enemy e:baddies){
             if(e != null){
-                if(p.x >e.x  && p.y > e.y && p.x  < e.x + e.w && p.y  < e.y+e.h){
+                if(p.x >e.x  && p.y > e.y && p.x  < e.x + e.w && p.y  < e.y+e.h && p.isFriendly){
                         e.takeDamage(p.attack);
                         //e.health -= (p.attack - e.defense);
                     return true;
@@ -147,7 +147,7 @@ public class MapSystem {
         }
         //check if bullet collides with player
         if(p.x >Main.engine.player.x  && p.y > Main.engine.player.y && p.x  < Main.engine.player.x + Main.engine.player.w && p.y  < Main.engine.player.y+Main.engine.player.h && !p.isFriendly){
-           // Main.engine.player.takeDamage(p.attack);
+           Main.engine.player.takeDamage(p.attack);
             return true;
         }
 

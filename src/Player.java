@@ -21,7 +21,7 @@ public class Player extends Graphic{
          defense = 0;
          speed = 5;
          level = 0;
-         experience = 1;
+         experience = 10;
          grabRange = 10;
          up = false;
          down = false;
@@ -69,6 +69,9 @@ public class Player extends Graphic{
          Main.processing.image(current.display(),x,y);
          if(weapon != null){
              weapon.display();
+         }
+         if(health <= 0){
+             Main.engine.playerDeath();
          }
      }
 
@@ -171,7 +174,17 @@ public class Player extends Graphic{
                      Main.engine.ui.abilityHighlight = ability;
                      //check if item trying to be used in a weapon and equiping if so
                      if(currentItem.isWeapon == true){
+                         //remove old stat changes if there is a weapon equipped
+                         if(weapon != null){
+                             maxHealth -= weapon.statChanges[0];
+                             attack -= weapon.statChanges[1];
+                             defense -= weapon.statChanges[2];
+                         }
                          weapon = new Weapon(inventory[ability]);
+                         //apply stat changes to player since we have gear equipped
+                         maxHealth += weapon.statChanges[0];
+                         attack += weapon.statChanges[1];
+                         defense += weapon.statChanges[2];
                      }
                      //if not item just use item
                      else {
@@ -195,6 +208,23 @@ public class Player extends Graphic{
      public void useWeapon(float mouseX,float mouseY){
          if(weapon != null){
             weapon.use(mouseX,mouseY);
+         }
+     }
+
+     public void addExperience(float experience){
+         this.experience += experience;
+         while(this.experience >= maxExperience){
+             level ++;
+             //make maxexperience large so to get  to the next level was harder than the last
+             this.experience -= maxExperience;
+             maxExperience += 5*level;
+
+         }
+     }
+
+     public void takeDamage(float damage){
+         if(defense < damage) {
+             health -= (damage-defense);
          }
      }
 

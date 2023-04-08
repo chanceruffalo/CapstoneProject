@@ -1,7 +1,7 @@
 import processing.core.PImage;
 
 public class Item extends Graphic  {
-    float minX,maxX,minY,maxY,boundaryRX,boundaryDY,boundaryLX,boundaryUY;
+    float minX,maxX,minY,maxY,boundaryRX,boundaryDY,boundaryLX,boundaryUY,powerLevel;
     String description,name,address,power;
     Animation animation,activate;
     Boolean interactable,isWeapon;
@@ -32,6 +32,7 @@ public class Item extends Graphic  {
         isWeapon = false;
         this.description = description;
         this.statChanges = statchanges;
+        powerLevel = 0;
         this.interactable = false;
         this.address = address;
         contactPoints = new Point[]{new Point(x,y),new Point(x+w,y),new Point(x,y+h),new Point(x+w,y+h) };
@@ -59,11 +60,17 @@ public class Item extends Graphic  {
         this.name = name;
         this.description = description;
         this.statChanges = statchanges;
+        powerLevel = 0;
         this.interactable = false;
         this.address = address;
         // power will be either shoot or slash
         this.power = power;
         this.isWeapon = isWeapon;
+        if(isWeapon){
+            for(int j = 0; j < 6; j ++){
+                powerLevel += statChanges[j];
+            }
+        }
         animation = new Animation(address,10,(int)w,(int)h);
         activate = new Animation("ImageAssets/activateBtn",10,15,15);
     }
@@ -87,6 +94,7 @@ public class Item extends Graphic  {
         this.name = name;
         this.description = description;
         this.statChanges = statchanges;
+        powerLevel = 0;
         this.interactable = false;
         this.address = address;
         this.isWeapon = false;
@@ -114,10 +122,16 @@ public class Item extends Graphic  {
         this.name = i.name;
         this.description = i.description;
         this.statChanges = i.statChanges;
+        powerLevel = 0;
         this.interactable = false;
         this.uses = i.uses;
         this.address = i.address;
         this.isWeapon = i.isWeapon;
+        if(isWeapon){
+            for(int j = 0; j < 6; j ++){
+                powerLevel += statChanges[j];
+            }
+        }
         this.power = i.power;
         animation = new Animation(address,10,(int)w,(int)h);
         activate = new Animation("ImageAssets/activateBtn",10,15,15);

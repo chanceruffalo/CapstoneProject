@@ -4,20 +4,24 @@ public class Library {
     Item[] items, spawnableItems;
     Building[] buildings, spawnableBuildings;
     Enemy[] baddies, spawnableEnemy;
-    Animation menuScreen;
+    Animation menuScreen,deathScreen;
     //this list will hold items that can spawn randomly in a map
     int spawnableMax, spawnableMin;
     Random random;
 
     public Library() {
         menuScreen = new Animation("ImageAssets/menuScreen",5,960,540);
+        deathScreen = new Animation("ImageAssets/GameOverScreen",5,960,540);
         // statchanges
         //  [0] , [1] , [2] , [3] , [4] , [5] , [6] , [7]
         //   hp , att , def , spd , maxH, exp , proW, Projectile H
         items = new Item[10];
-        items[0] = new Item(-100, -100, 50, 50, "Red Mushroom", "Magical healing mushroom.\nCan be produced.", new int[]{5, 0, 0, 0, 0, 0}, "ImageAssets/mushroom", 5, 5, 35, 10, 1);
-        items[1] = new Item(-100, -100, 25, 15, "Blue watercan", "Tool for watering plants.", new int[]{0, 5, 0, 2, 0, 0, 10, 10}, "ImageAssets/watercan", 0, 0, 0, 0, true, "shoot");
-        items[2] = new Item(-100, -100, 50, 50, "Sign Post", "Interact to move to next area.", new int[]{}, "ImageAssets/signPost", 5, 5, 20, 5, "teleport: level1");
+        items[0] = new Item(-100, -100, 50, 50, "Red Mushroom", "Magical healing\n mushroom.\nCan be produced.", new int[]{5, 0, 0, 0, 0, 0}, "ImageAssets/mushroom", 5, 5, 35, 10, 1);
+        items[1] = new Item(-100, -100, 25, 15, "Blue watercan", "Tool for watering plants.", new int[]{0, 5, 0, 300, 0, 0, 10, 10,14,8}, "ImageAssets/watercan", 0, 0, 0, 0, true, "shoot");
+        items[2] = new Item(-100, -100, 50, 50, "Sign Post", "'' Interact to move\n     to next area.''", new int[]{}, "ImageAssets/signPost", 5, 5, 20, 5, "teleport: level1");
+        //sign post can change teleport to be: level1
+        //                                   : base
+        items[3] = new Item(-100,-100,38,127,"Ice Staff","Blue decorative polearm with potent magic.",new int[]{10,7,0,500,0,0,17,32,10,-30},"ImageAssets/iceStaff",0,0,0,0,true,"shoot");
         //subset list for items to spawn in maps
         spawnableItems = new Item[10];
         spawnableItems[0] = items[0];
@@ -32,10 +36,10 @@ public class Library {
         spawnableBuildings[1]  =  new Building(-100,-100,50,50,"ImageAssets/level1bush",10,3,3,30,3);
 
         baddies = new Enemy[5];
-        baddies[0] = new Enemy("Reaper", 600, 200, 59, 66, 3, 5, 0, 10, 10, 5, null, 3, "ImageAssets/reaperEnemy");
+        baddies[0] = new Enemy("Reaper", 600, 200, 59, 66, 3,500, 5,100, 0, 10, 10, 5, null, 3, "ImageAssets/reaperEnemy");
         //subset of enemies that can spawn
         spawnableEnemy = new Enemy[5];
-        spawnableEnemy[0] = new Enemy("Reaper", 600, 200, 59, 66, 3, 5, 0, 10, 10, 5, null, 3, "ImageAssets/reaperEnemy");
+        spawnableEnemy[0] = new Enemy("Reaper", 600, 200, 59, 66, 3, 500,5,100, 0, 10, 10, 5, null, 3, "ImageAssets/reaperEnemy");
     }
 
     // methods to return copys of objects

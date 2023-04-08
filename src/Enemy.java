@@ -1,18 +1,22 @@
 public class Enemy extends Graphic{
-    float x,y,w,h,dx,dy,speed,attack,defense,health,maxHealth,experience,footY;
-    int i,j,level,movementCounter,recentDamageTimer;
+    float x,y,w,h,dx,dy,speed,attack,defense,health,maxHealth,experience,footY,projectileSpeed;
+    int i,j,level,movementCounter,recentDamageTimer,weaponCoolDown,weaponCoolDownRate;
     boolean up,down,left,right,playerSpotted;
     String name,address,recentDamage;
     //this array will show damage done as floating numbers above enemy
     Weapon weapon;
+    Projectile projectile;
+
     Animation current, rightIdle,leftIdle,alert;
-    public Enemy(String name,float x, float y,float w, float h,float speed, float attack, float defense, float health, float maxHealth, float experience, Weapon weapon, int level,String address){
+    public Enemy(String name,float x, float y,float w, float h,float speed,float projectileSpeed, float attack,int weaponCoolDownRate, float defense, float health, float maxHealth, float experience, Weapon weapon, int level,String address){
         this.x = x;
         this.y = y;
         this.w = w;
         this.h = h;
         this.speed = speed;
         this.attack = attack;
+        this.weaponCoolDownRate = weaponCoolDownRate;
+        this.projectileSpeed = projectileSpeed;
         this.defense = defense;
         this.health = health;
         this.maxHealth = maxHealth;
@@ -22,6 +26,8 @@ public class Enemy extends Graphic{
         this.footY = 10;
         this.name = name;
         this.address = address;
+        weaponCoolDown = 0;
+        projectile = new Projectile(x,y,25,25,attack,projectileSpeed,address+"Projectile",false);
         //for renderer comparison
         value = y + h;
         movementCounter = 0;
@@ -56,11 +62,14 @@ public class Enemy extends Graphic{
         this.h = e.h;
         this.speed = e.speed;
         this.attack = e.attack;
+        this.weaponCoolDownRate = e.weaponCoolDownRate;
+        this.weaponCoolDown = e.weaponCoolDown;
         this.defense = e.defense;
         this.health = e.health;
         this.maxHealth = e.maxHealth;
         this.experience = e.experience;
         this.weapon = e.weapon;
+        this.projectile = e.projectile;
         this.level = e.level;
         this.footY = e.footY;
         this.name = e.name;
@@ -97,6 +106,7 @@ public class Enemy extends Graphic{
         }
 
         if(health <= 0){
+            Main.engine.player.addExperience(experience);
             Main.engine.currentMap.deleteEnemy(x,y);
         }
     }
@@ -172,14 +182,27 @@ public class Enemy extends Graphic{
 
     }
     public void move(String behavior){
-        if(behavior.equals("spotted")){
 
+        if(behavior.equals("spotted")){
+            if(weaponCoolDown <= 0 && Main.engine.timer > 10) {
+                Projectile temp = new Projectile(projectile);
+                float px = GEngine.player.x;
+                float py = GEngine.player.y;
+                double distance = Math.sqrt((x - px) * (x - px) + (y - py) * (y - py));
+                temp.dx = (px - x) / (float) distance;
+                temp.dy = (py - y) / (float) distance;
+                temp.x = x;
+                temp.y = y;
+                Main.engine.currentMap.addBullet(temp);
+                weaponCoolDown = weaponCoolDownRate;
+            }
 
 
         }
         else{
             getDxy();
         }
+        weaponCoolDown --;
 
     }
 
